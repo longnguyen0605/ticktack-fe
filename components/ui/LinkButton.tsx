@@ -10,17 +10,12 @@ interface ButtonProps {
 const LinkButton = (props: ButtonProps) => {
   return (
     <TouchableOpacity onPress={props.onPress}>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>{props.title}</Text>
-      </View>
+      <Text style={styles.buttonText}>{props.title}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    marginVertical: 20
-  },
   buttonText: {
     color: color.primary,
     fontSize: 16,

@@ -6,6 +6,7 @@ import PrimaryButton from '@/components/ui/PrimaryButton';
 import LinkButton from '@/components/ui/LinkButton';
 import { router } from 'expo-router';
 import * as Progress from 'react-native-progress';
+import { color } from '@/theme/color';
 
 interface OnboardingProps {
   title: string,
@@ -32,11 +33,21 @@ const Onboarding = (props: OnboardingProps) => {
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={images[props.order - 1]}/>
       </View>
-      {props.description && <Text style={{...textStyle.subText, ...styles.subtex}}>{props.description}</Text>}
-      {props.order === 3 && <Text style={{...textStyle.title, ...styles.title, marginBottom: 120, marginTop: 0}}>{props.title}</Text>}
-      <Progress.Bar progress={1/3} width={200}/>
-      <PrimaryButton title='Next' onPress={() => handleNavigation(props.order)}/>
-      {props.order !== 3 && <LinkButton title='Skip' onPress={() => {router.navigate('/(onboarding)/onboarding3')}}/>}
+      {props.description && <Text style={{...textStyle.subText, ...styles.subText}}>{props.description}</Text>}
+      {props.order === 3 && <Text style={{...textStyle.title, ...styles.title, marginBottom: 60, marginTop: 0}}>{props.title}</Text>}
+      <View style={styles.progressBar}>
+        <Progress.Bar progress={props.order/3} width={200} color={color.primary}/>
+      </View>
+      <PrimaryButton title={props.order === 3 ? 'TickTack Now' : 'Next'} onPress={() => handleNavigation(props.order)}/>
+      {props.order !== 3 && <View style={{marginTop: 20}}>
+          <LinkButton title='Skip' onPress={() => {router.navigate('/(onboarding)/onboarding3')}}/>
+        </View>}
+       {props.order === 3 && <View style={{marginTop: 15}}>
+        <Text>
+          <Text style={{...styles.subText, ...textStyle.subText}}>Already have account? </Text>
+          <Text style={styles.linkText} onPress={() => {console.log("Done")}}>Login</Text>
+        </Text>
+        </View>}
     </SafeAreaView>
   );
 }
@@ -58,10 +69,19 @@ const styles = StyleSheet.create({
     height: 450,
     width: 450
   },
-  subtex: {
+  subText: {
     textAlign: 'center',
     paddingHorizontal: 15,
-    marginBottom: 60
+  },
+  linkText: {
+    fontSize: 16,
+    color: color.primary,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline'
+  },
+  progressBar: {
+    marginVertical: 30,
+    alignItems: 'center'
   }
 })
 

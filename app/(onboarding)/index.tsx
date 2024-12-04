@@ -1,13 +1,15 @@
 import { Link } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Logo from "@/components/ui/Logo";
 
 export default function Onboarding() {
   const isOnboarding: boolean = true;
 
   return (<SafeAreaView style={styles.container}>
     <View>
+      <Logo width={500} height={500}/>
       <Text>
         Welcome to TickTack
       </Text>
