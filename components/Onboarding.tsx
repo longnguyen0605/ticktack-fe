@@ -45,7 +45,7 @@ const Onboarding = (props: OnboardingProps) => {
        {props.order === 3 && <View style={{marginTop: 15}}>
         <Text>
           <Text style={{...styles.subText, ...textStyle.subText}}>Already have account? </Text>
-          <Text style={styles.linkText} onPress={() => {console.log("Done")}}>Login</Text>
+          <Text style={styles.linkText} onPress={() => {router.navigate('/(auth)/login')}}>Login</Text>
         </Text>
         </View>}
     </SafeAreaView>
