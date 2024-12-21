@@ -1,4 +1,5 @@
 import { StyleSheet, Image,View, Button, Text, Touchable, TouchableOpacity } from "react-native";
+import { color } from "@/theme/color";
 import { PlaystationGamepad } from "@/assets/icon/DesignPattern/PlaystationGamepad"
 import { MinusCircle } from "@/assets/icon/DesignPattern/MinusCircle";
 import { NavArrowRight } from "@/assets/icon/DesignPattern/NavArrowRight";
@@ -7,7 +8,8 @@ import { textStyle } from "@/theme/textStyle";
 
 interface CategoryItemProps{
     id: number,
-    name: string,
+    categoryName: string,
+    categoryInfo: string,
     icon: JSX.Element,
 
 }
@@ -27,13 +29,13 @@ const CategoryItem = (props: CategoryItemProps) =>{
 
             {/* Texts in the middle */}
             <View style={styles.textContainer}>
-            <Text style={{...textStyle.title, ...styles.title,}}>{props.name}</Text>
-                <Text style={{...textStyle.subText, ...styles.subtitle,}}>{props.name}</Text>
+            <Text style={{...textStyle.title, ...styles.title,}}>{props.categoryName}</Text>
+                <Text style={{...textStyle.subText, ...styles.subtitle,}}>{props.categoryInfo}</Text>
             </View>
 
             {/* Chevron on the right */}
             <TouchableOpacity>
-                <NavArrowRight  height={40} width={40} color="#4F5C76" />
+                <NavArrowRight  height={30} width={30} stroke={color.primary} />
             </TouchableOpacity>
             
         </View>    
@@ -55,6 +57,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 4,
+        
     },
     iconContainer: {
         marginRight: 16,
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: "600",
+        
         
     },
     subtitle: {
