@@ -1,7 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RootStackParamList from "./StackParamList";
+import SuggestionParamList from "@/app/(suggestion)/paramList";
 import { GraduationCap } from "@/assets/icon/DesignPattern/GraduationCap";
 import { textStyle } from "@/theme/textStyle";
 import { color } from "@/theme/color";
@@ -44,7 +44,7 @@ const CategoryMenu = () =>{
 
     ];
 
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp<SuggestionParamList>>();
     return(
         <SafeAreaView style={styles.container}>
             <Text style={{...textStyle.normalTitle, ...styles.title}}>Suggestion</Text>

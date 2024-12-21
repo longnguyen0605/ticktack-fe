@@ -5,6 +5,9 @@ import { MinusCircle } from "@/assets/icon/DesignPattern/MinusCircle";
 import { NavArrowRight } from "@/assets/icon/DesignPattern/NavArrowRight";
 import React from "react";
 import { textStyle } from "@/theme/textStyle";
+import { useNavigation } from "@react-navigation/native";
+import SuggestionParamList from "@/app/(suggestion)/paramList";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface CategoryItemProps{
     id: number,
@@ -15,13 +18,18 @@ interface CategoryItemProps{
 }
 
 
-
 const CategoryItem = (props: CategoryItemProps) =>{
     let modIcon = <MinusCircle/>
     if (props.icon){
         modIcon = React.cloneElement(props.icon, {...styles.icon})
     }
     
+    const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
+
+    const handleBtnPress = () =>{
+        navigator.push('appSelect', {id: props.id})
+    }
+
     return(
         <View style={styles.container}>
             {/* Icon on the left */}
@@ -34,7 +42,9 @@ const CategoryItem = (props: CategoryItemProps) =>{
             </View>
 
             {/* Chevron on the right */}
-            <TouchableOpacity>
+            <TouchableOpacity 
+                onPress={handleBtnPress}
+            >
                 <NavArrowRight  height={30} width={30} stroke={color.primary} />
             </TouchableOpacity>
             
