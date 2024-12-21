@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     
     itemContainer:{
         marginTop:  30,
+         width:"100%"
     }
 }); 
 

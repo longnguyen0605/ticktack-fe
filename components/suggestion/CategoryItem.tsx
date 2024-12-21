@@ -27,21 +27,19 @@ const CategoryItem = (props: CategoryItemProps) =>{
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
 
     const handleBtnPress = () =>{
-        navigator.push('appSelect', {id: props.id})
+        navigator.navigate('appSelect', {id: props.id})
     }
 
     return(
         <View style={styles.container}>
-            {/* Icon on the left */}
             <View style={styles.iconContainer}>{modIcon}</View>
 
-            {/* Texts in the middle */}
             <View style={styles.textContainer}>
             <Text style={{...textStyle.title, ...styles.title,}}>{props.categoryName}</Text>
                 <Text style={{...textStyle.subText, ...styles.subtitle,}}>{props.categoryInfo}</Text>
             </View>
 
-            {/* Chevron on the right */}
+    
             <TouchableOpacity 
                 onPress={handleBtnPress}
             >
@@ -58,7 +56,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#E7E9FE",
+        backgroundColor: color.primaryBg,
         borderRadius: 12,
         padding: 16,
         marginVertical: 8,

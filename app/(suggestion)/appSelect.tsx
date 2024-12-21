@@ -1,7 +1,7 @@
-import { Text, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
+import { Text } from "react-native";
 import SuggestionParamList from "./paramList";
-import AppSelect from "@/components/suggestion/appSelect";
+import AppSelect from "@/components/suggestion/AppSelect";
 
 
 type AppSelectScreenRouteProp = RouteProp<SuggestionParamList, 'appSelect'>;
@@ -11,5 +11,6 @@ export default function AppSelectScreen({route} : {route: AppSelectScreenRoutePr
     const {id} = route.params;
     return(
         <AppSelect id={id}/>
+ 
     )
 }
