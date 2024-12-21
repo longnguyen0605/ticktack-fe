@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const BluetoothTag = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="m9 9.6 6 5.1-3.143 3.3V6L15 9.3l-6 5.1"
           strokeLinecap="round"

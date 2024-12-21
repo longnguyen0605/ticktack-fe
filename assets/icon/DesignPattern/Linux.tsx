@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const Linux = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path d="M2.5 20c1 0 2-.8 2-2v-7c0-3.5 3.1-7 7.5-7M21.5 20c-1 0-2-.8-2-2v-7c0-3.5-3.1-7-7.5-7" />
         <Path
           d="M12 19c2.761 0 5-1.12 5-2.5S14.761 14 12 14s-5 1.12-5 2.5S9.239 19 12 19"

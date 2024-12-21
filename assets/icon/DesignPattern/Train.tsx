@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const Train = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path
           d="M9.609 7h4.782A2.61 2.61 0 0 1 17 9.609a.39.39 0 0 1-.391.391H7.39A.39.39 0 0 1 7 9.609 2.61 2.61 0 0 1 9.609 7"
           strokeLinejoin="round"

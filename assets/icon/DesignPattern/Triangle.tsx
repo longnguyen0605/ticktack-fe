@@ -7,7 +7,7 @@ export const Triangle = (props: IProps) => {
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
       <G clipPath="url(#a)">
         <Path
-          stroke="#131927"
+          stroke={props.stroke?props.stroke:"#131927"}
           d="M11.475 2.947a.6.6 0 0 1 1.05 0l9.373 16.912a.6.6 0 0 1-.524.891H2.626a.6.6 0 0 1-.525-.89z"
           strokeLinecap="round"
           strokeLinejoin="round"

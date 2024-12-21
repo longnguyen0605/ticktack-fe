@@ -6,7 +6,7 @@ export const ArrowBr = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
       <Path
-        stroke="#131927"
+        stroke={props.stroke?props.stroke:"#131927"}
         d="m6 6 13 13m0 0V6.52M19 19H6.52"
         strokeLinecap="round"
         strokeLinejoin="round"

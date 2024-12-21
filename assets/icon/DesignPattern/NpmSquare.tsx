@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const NpmSquare = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path d="M8 16h8V8H8z" strokeLinejoin="round" />
         <Path d="M13 11v5" />
         <Path

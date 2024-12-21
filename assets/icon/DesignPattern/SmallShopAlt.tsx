@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const SmallShopAlt = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path d="M3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9" />
         <Path
           d="M14.834 21v-6a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v6"

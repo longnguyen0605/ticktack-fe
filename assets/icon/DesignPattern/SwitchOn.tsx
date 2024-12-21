@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const SwitchOn = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           fill="#131927"
           d="M17 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2"

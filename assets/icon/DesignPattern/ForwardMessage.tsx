@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const ForwardMessage = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path d="m7 8 5 3 5-3" strokeLinejoin="round" />
         <Path d="M10 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6.857" />
         <Path

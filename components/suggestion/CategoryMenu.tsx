@@ -17,11 +17,11 @@ import { MenuScale } from "@/assets/icon/DesignPattern/MenuScale";
 
 const CategoryMenu = () =>{
     const iconList = [
-        <GraduationCap />,
-        <LargeSuitcase />,
-        <PlaystationGamepad />,
-        <Swimming />,   
-        <MenuScale />
+        <GraduationCap stroke={color.primary}/>,
+        <LargeSuitcase stroke={color.primary}/>,
+        <PlaystationGamepad stroke={color.primary}/>,
+        <Swimming stroke={color.primary}/>,   
+        <MenuScale stroke={color.primary}/>
 
     ];
 

@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const Metro = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path
           d="m14 16.01.01-.011M10 16.01l.01-.011M22 12v3a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5v-3C2 6.477 6.477 2 12 2s10 4.477 10 10"
           strokeLinejoin="round"

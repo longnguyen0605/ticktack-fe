@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const ReminderHandGesture = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="m17.5 12 2.004 2.672a2 2 0 0 1-.126 2.552l-3.783 4.127A2 2 0 0 1 14.12 22H9.5c-2.358 0-3.622-2.575-3.982-3.93a.6.6 0 0 1-.018-.143V9.43c0-2.286 3-2.286 3 0v.57"
           strokeLinecap="round"

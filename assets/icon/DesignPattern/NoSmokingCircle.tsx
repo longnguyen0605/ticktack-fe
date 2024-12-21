@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const NoSmokingCircle = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="M15 12v3M15 9c0-1-.714-2-2.143-2v0A2.857 2.857 0 0 1 10 4.143V3M18 9V4M18 12v3"
           strokeLinecap="round"

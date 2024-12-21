@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const StatsReport = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="M10 9H6M15.5 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5M6 6h3M18 18l-4.5-3-2.5 2-5-4"
           strokeLinecap="round"

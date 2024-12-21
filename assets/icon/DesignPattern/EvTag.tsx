@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const EvTag = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="m18.5 9-3 6-3-6M10 9H6v6h4M6 12h3"
           strokeLinecap="round"

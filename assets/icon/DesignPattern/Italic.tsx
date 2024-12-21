@@ -6,7 +6,7 @@ export const Italic = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
       <Path
-        stroke="#131927"
+        stroke={props.stroke?props.stroke:"#131927"}
         d="M11 5h3m3 0h-3m0 0-4 14m0 0H7m3 0h3"
         strokeLinecap="round"
         strokeLinejoin="round"
