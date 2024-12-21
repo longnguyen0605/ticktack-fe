@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import AppSelectScreen from './appSelect';
 import CategoryMenuScreen from './categoryMenu';
 import SuggestionParamList from './paramList';
+import AppPlanningScreen from './appPlanning';
 
 
 const Stack = createStackNavigator<SuggestionParamList>();
@@ -19,6 +20,7 @@ const SuggestionLayout = () => {
     >
         <Stack.Screen name='categoryMenu' component={CategoryMenuScreen}  />
         <Stack.Screen name='appSelect' component={AppSelectScreen}/>
+        <Stack.Screen name='appPlanning' component={AppPlanningScreen}/>
     </Stack.Navigator>  
   );
 }

@@ -45,10 +45,13 @@ const AppSelect = (props: AppSelectProps) =>{
             <FlatList 
                 style={styles.itemContainer}
                 data={appDataList}
-                renderItem={({item}) => <AppItem id={item.id} 
-                                                    appName={item.appName} 
-                                                    logoURL = {item.logoURL}
-                                                />}
+                renderItem={({item}) => 
+                    <AppItem 
+                        id={item.id} 
+                        appName={item.appName} 
+                        logoURL = {item.logoURL}
+                    />
+                }
             />
             
         </SafeAreaView>

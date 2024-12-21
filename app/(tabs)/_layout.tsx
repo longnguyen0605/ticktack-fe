@@ -2,6 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./home";
 import SuggestionLayout from "../(suggestion)/_layout";
 import { StyleSheet } from "react-native";
+import { HomeSimpleDoor } from "@/assets/icon/DesignPattern/HomeSimpleDoor";
+import { ReportColumns } from "@/assets/icon/DesignPattern/ReportColumns";
 
 
 
@@ -16,8 +18,22 @@ export default function TabLayout() {
         headerShown: false
     }}
     >
-        <Tab.Screen name="home" component={HomeScreen}/>
-        <Tab.Screen name="suggestion" component={SuggestionLayout}/>
+        <Tab.Screen name="home" component={HomeScreen}
+          options={{
+            title:"Home",
+            tabBarIcon: ({ color, size }) => (
+              <HomeSimpleDoor  width={size} height={size} stroke={color} />
+            ),
+          }}
+        />
+        <Tab.Screen name="suggestion" component={SuggestionLayout}
+          options={{
+            title:"Suggestion",
+            tabBarIcon: ({ color, size }) => (
+              <ReportColumns  width={size} height={size} stroke={color} />
+            ),
+          }}
+        />
     </Tab.Navigator>    
   );
 }

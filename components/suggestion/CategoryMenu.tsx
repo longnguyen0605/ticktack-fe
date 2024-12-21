@@ -52,11 +52,14 @@ const CategoryMenu = () =>{
                 showsVerticalScrollIndicator={false}
                 style={styles.itemContainer}
                 data={categoryData}
-                renderItem={({item}) => <CategoryItem id={item.id} 
-                                                    categoryName={item.categoryName} 
-                                                    categoryInfo={item.categoryInfo} 
-                                                    icon = {item.icon}
-                                                />}
+                renderItem={({item}) => 
+                    <CategoryItem 
+                        id={item.id} 
+                        categoryName={item.categoryName} 
+                        categoryInfo={item.categoryInfo} 
+                        icon = {item.icon}
+                    />
+                }
             />
             
         </SafeAreaView>
