@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./home";
 import SuggestionLayout from "../(suggestion)/_layout";
-
+import { StyleSheet } from "react-native";
 
 
 
@@ -21,3 +21,5 @@ export default function TabLayout() {
     </Tab.Navigator>    
   );
 }
+
+const styles = StyleSheet.create({});
