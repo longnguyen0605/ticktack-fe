@@ -7,8 +7,14 @@ export const textStyle = StyleSheet.create({
     fontWeight: 'bold',
     color: color.primary
   },
+  normalTitle:{
+    fontSize: 30  ,
+    fontWeight: 'bold',
+    color: color.primary
+  },
   subText: {
     fontSize: 16,
     color: color.subText
-  }
+  },
+  
 })
