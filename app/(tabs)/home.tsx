@@ -7,94 +7,93 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import MedalIcon from '@/assets/images/medal.svg';
-
 export default function HomeScreen() {
   /*******************************
    * STATE
    *******************************/
-  // Countdown state
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
 
-  // Confirmation dialog for "Give up"
+  const [showRewardScreen, setShowRewardScreen] = useState(false);
   const [showGiveUpModal, setShowGiveUpModal] = useState(false);
-
-  // Planning-Settings modal
   const [showPlanningModal, setShowPlanningModal] = useState(false);
 
-  // Plan settings
+  const [selectedTab, setSelectedTab] = useState('planning'); // Planning or Favourite tab
   const [activity, setActivity] = useState('Study');
   const [focusedTime, setFocusedTime] = useState(25);
   const [todayQuote, setTodayQuote] = useState(
     'One day, all your hard work will pay off'
   );
 
+  const [showQuote, setShowQuote] = useState(false);
+
+  const timeOptions = [10, 15, 20, 25, 30, 35, 40];
+
   /*******************************
-   * SIDE EFFECTS (Countdown)
+   * SIDE EFFECTS
    *******************************/
   useEffect(() => {
     let intervalId = null;
-
     if (isRunning && timeLeft > 0) {
-      intervalId = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
+      intervalId = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
     } else {
       clearInterval(intervalId);
     }
-
     return () => clearInterval(intervalId);
   }, [isRunning, timeLeft]);
 
+  useEffect(() => {
+    if (timeLeft === 0 && isRunning) {
+      setIsRunning(false);
+      setShowRewardScreen(true);
+    }
+  }, [timeLeft, isRunning]);
+
   /*******************************
-   * HELPER FUNCTIONS
+   * FUNCTIONS
    *******************************/
-  // Convert seconds to mm:ss
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Handle Start / Give Up
   const handleButtonPress = () => {
     if (!isRunning) {
       setIsRunning(true);
+      setShowRewardScreen(false);
+      setShowQuote(true);
     } else {
-      // Timer is running => user wants to "Give up"
       setShowGiveUpModal(true);
     }
   };
 
-  // Confirm "Give up"
   const confirmGiveUp = () => {
     setIsRunning(false);
-    setTimeLeft(focusedTime * 60); // Reset to the user’s selected focus time
+    setTimeLeft(focusedTime * 60);
     setShowGiveUpModal(false);
+    setShowQuote(false);
   };
 
-  // Cancel "Give up"
   const cancelGiveUp = () => {
     setShowGiveUpModal(false);
   };
 
-  // Handle Pencil Press => open planning settings
   const handleEditPlanPress = () => {
+    setSelectedTab('planning');
     setShowPlanningModal(true);
   };
 
-  // Close planning modal without saving
   const handleCancelPlanning = () => {
     setShowPlanningModal(false);
   };
 
-  // Save planning changes
   const handleSavePlanning = () => {
-    // If the timer is NOT running, update the timeLeft with the newly chosen focus time
     if (!isRunning) {
       setTimeLeft(focusedTime * 60);
     }
@@ -106,59 +105,78 @@ export default function HomeScreen() {
    *******************************/
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Home</Text>
-        <View style={styles.medalContainer}>
-          <MedalIcon width={20} height={20} style={styles.icon} />
-          <Text style={styles.medalText}>10</Text>
-        </View>
-      </View>
-
-      {/* Motivational Text */}
-      <View style={styles.messageBox}>
-        <Text style={styles.messageText}>{todayQuote}</Text>
-      </View>
-
-      {/* Large Clock Illustration (replace with your own as needed) */}
-      <View style={styles.clockContainer}>
-        <Image
-          source={require('@/assets/images/HomeIllustration.png')}
-          style={styles.clockImage}
-        />
-      </View>
-
-      {/* Time Card */}
-      <View style={styles.timeCard}>
-        {/* Card Header */}
-        <View style={styles.timeCardHeader}>
-          <Text style={styles.timeCardTitle}>Your time</Text>
-          <TouchableOpacity style={styles.editButton} onPress={handleEditPlanPress}>
-            <Ionicons name="pencil-sharp" size={18} color="#999" />
+      {showRewardScreen ? (
+        <View style={styles.rewardContainer}>
+          <Text style={styles.rewardCongratsText}>Hooray!!! Congratulations</Text>
+          <Image
+            source={require('@/assets/images/Finish.png')}
+            style={styles.finishImage}
+          />
+          <Text style={styles.rewardSubHeader}>Your Reward</Text>
+          <TouchableOpacity
+            style={styles.receiveButton}
+            onPress={() => {
+              setShowRewardScreen(false);
+              setTimeLeft(focusedTime * 60);
+            }}
+          >
+            <Text style={styles.receiveButtonText}>Receive</Text>
           </TouchableOpacity>
         </View>
+      ) : (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Home</Text>
+              <View style={styles.medalContainer}>
+              <MedalIcon width={20} height={20} style={styles.icon} />
+              <Text style={styles.medalText}>10</Text>
+            </View>
+          </View>
 
-        {/* Small Activity Tag */}
-        <View style={styles.tagContainer}>
-          <View style={styles.dot} />
-          <Text style={styles.tagText}>{activity}</Text>
-        </View>
+          {showQuote && (
+            <View style={styles.messageBox}>
+              <Text style={styles.messageText}>{todayQuote}</Text>
+            </View>
+          )}
 
-        {/* Countdown Timer */}
-        <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+          <View style={styles.clockContainer}>
+            <Image
+              source={
+                isRunning
+                  ? require('@/assets/images/Planning.png')
+                  : require('@/assets/images/HomeIllustration.png')
+              }
+              style={styles.clockImage}
+            />
+          </View>
 
-        {/* Start / Give Up Button */}
-        <TouchableOpacity style={styles.actionButton} onPress={handleButtonPress}>
-          <Text style={styles.actionButtonText}>
-            {isRunning ? 'Give up' : 'Start'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.timeCard}>
+            <View style={styles.timeCardHeader}>
+              <Text style={styles.timeCardTitle}>Your time</Text>
+              <TouchableOpacity
+                style={styles.pencilButton}
+                onPress={handleEditPlanPress}
+              >
+                <Ionicons name="pencil" size={16} color="#FFF" />
+              </TouchableOpacity>
+            </View>
 
-      {/*********************************************************************************************
-       * GIVE UP CONFIRMATION MODAL
-       *********************************************************************************************/}
-      <Modal
+            <View style={styles.activityTag}>
+              <Text style={styles.activityText}>{activity}</Text>
+            </View>
+
+            <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+
+            <TouchableOpacity style={styles.actionButton} onPress={handleButtonPress}>
+              <Text style={styles.actionButtonText}>
+                {isRunning ? 'Give up' : 'Start'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
+<Modal
         visible={showGiveUpModal}
         transparent
         animationType="fade"
@@ -185,87 +203,120 @@ export default function HomeScreen() {
         </View>
       </Modal>
 
-      {/*********************************************************************************************
-       * PLANNING SETTINGS MODAL
-       *********************************************************************************************/}
+      {/* Planning Modal */}
       <Modal
         visible={showPlanningModal}
         transparent
-        animationType="fade"
+        animationType="slide"
         onRequestClose={handleCancelPlanning}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.planningModalContainer}>
-            <Text style={styles.modalHeaderText}>Planning Settings</Text>
-
-            {/* Activity */}
-            <Text style={styles.modalLabel}>Activity</Text>
-            <View style={styles.activityRow}>
-              {['Study', 'Work', 'Relax', 'Sport', 'Other'].map((act) => (
+            <ScrollView>
+              <View style={styles.tabBar}>
                 <TouchableOpacity
-                  key={act}
                   style={[
-                    styles.activityButton,
-                    activity === act && styles.activityButtonSelected,
+                    styles.tabButton,
+                    selectedTab === 'planning' && styles.tabButtonSelected,
                   ]}
-                  onPress={() => setActivity(act)}
+                  onPress={() => setSelectedTab('planning')}
                 >
                   <Text
                     style={[
-                      styles.activityButtonText,
-                      activity === act && styles.activityButtonTextSelected,
+                      styles.tabButtonText,
+                      selectedTab === 'planning' && styles.tabButtonTextSelected,
                     ]}
                   >
-                    {act}
+                    Planning Settings
                   </Text>
                 </TouchableOpacity>
-              ))}
-            </View>
-
-            {/* Focused Time */}
-            <Text style={styles.modalLabel}>Focused Time (minutes)</Text>
-            <View style={styles.focusedTimeRow}>
-              {[10, 15, 20, 25, 30, 35, 40].map((t) => (
                 <TouchableOpacity
-                  key={t}
                   style={[
-                    styles.focusTimeButton,
-                    focusedTime === t && styles.focusTimeButtonSelected,
+                    styles.tabButton,
+                    selectedTab === 'favourite' && styles.tabButtonSelected,
                   ]}
-                  onPress={() => setFocusedTime(t)}
+                  onPress={() => setSelectedTab('favourite')}
                 >
                   <Text
                     style={[
-                      styles.focusTimeButtonText,
-                      focusedTime === t && styles.focusTimeButtonTextSelected,
+                      styles.tabButtonText,
+                      selectedTab === 'favourite' && styles.tabButtonTextSelected,
                     ]}
                   >
-                    {t}
+                    My Favourite
                   </Text>
                 </TouchableOpacity>
-              ))}
-            </View>
+              </View>
 
-            {/* Today Quote */}
-            <Text style={styles.modalLabel}>Today Quote</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={todayQuote}
-                style={{ flex: 1 }}
-                onValueChange={(itemValue) => setTodayQuote(itemValue)}
-              >
-                {[
-                  'One day, all your hard work will pay off',
-                  'Focus on the journey, not the destination',
-                  'Stay consistent, success is near',
-                  'Every effort will be rewarded eventually',
-                ].map((quoteItem) => (
-                  <Picker.Item label={quoteItem} value={quoteItem} key={quoteItem} />
-                ))}
-              </Picker>
-            </View>
+              {selectedTab === 'planning' && (
+                <>
+                  <Text style={styles.sectionTitle}>Activity</Text>
+                  <View style={styles.activityContainer}>
+                    {['Study', 'Work', 'Relax', 'Sport', 'Other'].map((act) => (
+                      <TouchableOpacity
+                        key={act}
+                        style={[
+                          styles.activityButton,
+                          activity === act && styles.activeActivityButton,
+                        ]}
+                        onPress={() => setActivity(act)}
+                      >
+                        <Text
+                          style={[
+                            styles.activityText,
+                            activity === act && styles.activeActivityText,
+                          ]}
+                        >
+                          {act}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
 
-            {/* Buttons */}
+                  <Text style={styles.sectionTitle}>Focused Time</Text>
+                  <View style={styles.timeSelectorContainer}>
+                    {timeOptions.map((time) => (
+                      <TouchableOpacity
+                        key={time}
+                        style={[
+                          styles.timeButton,
+                          focusedTime === time && styles.activeTimeButton,
+                        ]}
+                        onPress={() => setFocusedTime(time)}
+                      >
+                        <Text
+                          style={[
+                            styles.timeText,
+                            focusedTime === time && styles.activeTimeText,
+                          ]}
+                        >
+                          {time}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <Text style={styles.sectionTitle}>Today Quote</Text>
+                  <Picker
+                    selectedValue={todayQuote}
+                    style={styles.pickerContainer}
+                    onValueChange={(value) => setTodayQuote(value)}
+                  >
+                    <Picker.Item label="One day, all your hard work will pay off" value="One day, all your hard work will pay off" />
+                    <Picker.Item label="Focus on the journey, not the destination" value="Focus on the journey, not the destination" />
+                    <Picker.Item label="Stay consistent, success is near" value="Stay consistent, success is near" />
+                    <Picker.Item label="Every effort will be rewarded eventually" value="Every effort will be rewarded eventually" />
+                  </Picker>
+                </>
+              )}
+
+              {selectedTab === 'favourite' && (
+                <Text style={{ textAlign: 'center', marginTop: 20 }}>
+                  My Favourite Plans will be displayed here.
+                </Text>
+              )}
+            </ScrollView>
+
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
@@ -273,24 +324,25 @@ export default function HomeScreen() {
               >
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.saveButton]}
-                onPress={handleSavePlanning}
-              >
-                <Text style={styles.saveButtonText}>Save</Text>
-              </TouchableOpacity>
+              {selectedTab === 'planning' && (
+                <TouchableOpacity
+                  style={[styles.button, styles.saveButton]}
+                  onPress={handleSavePlanning}
+                >
+                  <Text style={styles.saveButtonText}>Save</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
       </Modal>
-      {/*********************************************************************************************/}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   /*******************************
-   * GENERAL CONTAINER STYLES
+   * SCREEN CONTAINER
    *******************************/
   container: {
     flex: 1,
@@ -305,7 +357,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 30,
     marginBottom: 10,
   },
   headerTitle: {
@@ -329,7 +381,7 @@ const styles = StyleSheet.create({
   },
 
   /*******************************
-   * MESSAGE BOX
+   * QUOTE
    *******************************/
   messageBox: {
     alignItems: 'center',
@@ -353,8 +405,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   clockImage: {
-    width: 120,
-    height: 120,
+    width: 300,
+    height: 300,
     resizeMode: 'contain',
   },
 
@@ -366,7 +418,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    // Shadows for iOS/Android
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -386,26 +437,47 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#4C5DFA',
   },
-  editButton: {
-    padding: 6,
+
+  /*******************************
+   * PENCIL BUTTON
+   *******************************/
+  pencilButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#4C5DFA',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  tagContainer: {
+
+  /*******************************
+   * ACTIVITY TAG
+   *******************************/
+  activityTag: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#ECE9FF',
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     marginBottom: 15,
   },
-  dot: {
+  activityDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: '#FCB242',
-    marginRight: 6,
+    marginRight: 8,
   },
-  tagText: {
+  activityText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#4C5DFA',
+    color: '#666',
   },
+
+  /*******************************
+   * TIMER + START/GIVE UP
+   *******************************/
   timerText: {
     fontSize: 48,
     fontWeight: 'bold',
@@ -425,13 +497,13 @@ const styles = StyleSheet.create({
   },
 
   /*******************************
-   * MODAL OVERLAY (common)
+   * MODAL OVERLAY
    *******************************/
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center', // Center the content vertically
+    alignItems: 'center', // Center the content horizontally
   },
 
   /*******************************
@@ -443,7 +515,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
-    // Add shadow if desired:
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -484,41 +555,69 @@ const styles = StyleSheet.create({
   },
 
   /*******************************
-   * PLANNING MODAL
+   * PLANNING MODAL (TABS)
    *******************************/
   planningModalContainer: {
-    width: '90%',
     backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 20,
-    // Add shadow if desired:
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    paddingTop: 10,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 6,
   },
+  tabBar: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    justifyContent: 'space-around',
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 2,
+    borderColor: '#E0E0E0',
+  },
+  tabButtonSelected: {
+    borderColor: '#4C5DFA',
+  },
+  tabButtonText: {
+    fontSize: 16,
+    color: '#999',
+    fontWeight: '600',
+  },
+  tabButtonTextSelected: {
+    color: '#4C5DFA',
+  },
+
+  /*******************************
+   * MODAL LABELS / SECTIONS
+   *******************************/
   modalHeaderText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#4C5DFA',
     textAlign: 'center',
+    color: '#4C5DFA',
+    marginBottom: 10,
   },
   modalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    marginTop: 10,
     marginBottom: 6,
+    color: '#444',
   },
 
   /*******************************
-   * ACTIVITY SELECTION
+   * ACTIVITY / TIME / QUOTE
    *******************************/
   activityRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   activityButton: {
     borderRadius: 20,
@@ -541,48 +640,53 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
 
-  /*******************************
-   * FOCUSED TIME SELECTION
-   *******************************/
-  focusedTimeRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 10,
+  dottedTrackContainer: {
+    marginBottom: 15,
   },
-  focusTimeButton: {
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#4C5DFA',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    marginRight: 8,
+  dottedTrack: {
+    position: 'relative',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
-  focusTimeButtonSelected: {
-    backgroundColor: '#4C5DFA',
+  dotSmall: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#ccc',
   },
-  focusTimeButtonText: {
-    color: '#4C5DFA',
-    fontSize: 14,
+  clockIconContainer: {
+    position: 'absolute',
+    top: -10,
+    transform: [{ translateX: -12 }],
+  },
+  timeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timeTouchable: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  timeText: {
+    fontSize: 16,
+    color: '#999',
     fontWeight: '600',
   },
-  focusTimeButtonTextSelected: {
-    color: '#FFF',
+  timeTextSelected: {
+    color: '#4C5DFA',
   },
-
-  /*******************************
-   * QUOTE PICKER
-   *******************************/
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
     overflow: 'hidden',
-    marginBottom: 15,
+    marginBottom: 20,
   },
 
   /*******************************
-   * PLANNING MODAL BUTTONS
+   * MODAL BOTTOM BUTTONS
    *******************************/
   saveButton: {
     backgroundColor: '#4C5DFA',
@@ -591,5 +695,132 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+
+  /*******************************
+   * REWARD SCREEN
+   *******************************/
+  rewardContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  rewardCongratsText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4C5DFA',
+    marginBottom: 10,
+  },
+  finishImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    marginBottom: 20,
+  },
+  rewardSubHeader: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 10,
+    color: '#444',
+  },
+  medalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  rewardMedalValue: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#999',
+  },
+  receiveButton: {
+    backgroundColor: '#4C5DFA',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginBottom: 10,
+  },
+  receiveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  doubleButton: {
+    backgroundColor: '#FCB242',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+  },
+  doubleButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#4a5dc3',
+  },
+  activityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  activityButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    backgroundColor: '#eaeaea',
+  },
+  activeActivityButton: {
+    backgroundColor: '#4a5dc3',
+  },
+  activityText: {
+    color: '#7F7F7F',
+    fontSize: 14,
+  },
+  activeActivityText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  timeSelectorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 10,
+  },
+  timeButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    backgroundColor: '#eaeaea',
+  },
+  activeTimeButton: {
+    backgroundColor: '#4a5dc3',
+  },
+  timeText: {
+    fontSize: 14,
+    color: '#7F7F7F',
+  },
+  activeTimeText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  quoteInput: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#eaeaea',
+    borderRadius: 10,
+    padding: 10,
+    fontSize: 14,
+    color: '#7F7F7F',
+  },
+  quotePickerContainer: {
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginBottom: 20,
   },
 });
