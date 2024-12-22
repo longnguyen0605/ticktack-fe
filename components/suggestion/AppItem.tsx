@@ -3,21 +3,31 @@ import { textStyle } from "@/theme/textStyle";
 import { Image, StyleSheet , Text, TouchableOpacity, View} from "react-native";
 import { color } from "@/theme/color";
 import Logo from "../ui/Logo";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import SuggestionParamList from "@/app/(suggestion)/paramList";
 
 interface AppItemProps{
     id: number,
     appName: string,
-    logoURL: string
+    logoURL: string,
+    height?: number,
+    bgColor?: string,
+    
 }
 
 const AppItem = (props: AppItemProps) =>{
 
+    const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const handleBtnPress = ()=>{
-
+        navigator.navigate('appPlanning', {id:props.id})
     }
     return(
-    <View style={styles.container}>
+        <View style={{...styles.container,
+                        backgroundColor: props.bgColor || color.primaryBg ,
+                        height: props.height ? props.height : "auto",}} 
+        >
 
         <View style={styles.logoContainer}>
             <Image 
@@ -31,7 +41,7 @@ const AppItem = (props: AppItemProps) =>{
         <Text style={{...textStyle.title, ...styles.title,}}>{props.appName}</Text>
             <Text style={{...textStyle.subText, ...styles.subtitle,}}>Recommendation: 1 hour per day</Text>
         </View>
-
+        
         <TouchableOpacity 
             onPress={handleBtnPress}
         >
