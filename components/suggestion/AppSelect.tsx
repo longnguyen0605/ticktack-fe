@@ -1,12 +1,15 @@
 import { StyleSheet, Text,TouchableOpacity,View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SuggestionHeader from "./SuggestionHeader";
-import AppItem from "./AppItem";
+import AppItem from "../AppItem";
 import { textStyle } from "@/theme/textStyle";
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { EditPencil } from "@/assets/icon/DesignPattern/EditPencil";
 import { color } from "@/theme/color";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+import SuggestionParamList from "@/app/(suggestion)/paramList";
 
 
 interface AppSelectProps{
@@ -22,6 +25,7 @@ interface IAppData{
 const AppSelect = (props: AppSelectProps) =>{
 
     const [appDataList , setAppDataList] = useState<IAppData[]>();
+    const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const getAppDataList = () =>{
 
@@ -42,7 +46,7 @@ const AppSelect = (props: AppSelectProps) =>{
     }, []);
    
     const handleEdit = () =>{
-
+        navigator.navigate('appEdit', {id:props.id})
     }
 
     return(
@@ -57,6 +61,8 @@ const AppSelect = (props: AppSelectProps) =>{
                         id={item.id} 
                         appName={item.appName} 
                         logoURL = {item.logoURL}
+                        description="Recommendation: 1 hour per day"
+                        mode="select"
                     />
                 }
             />
