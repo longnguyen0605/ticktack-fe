@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const MicAdd = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="M16.992 19h3m3 0h-3m0 0v-3m0 3v3"
           strokeLinecap="round"

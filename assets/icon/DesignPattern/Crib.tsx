@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const Crib = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinejoin="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinejoin="round" strokeWidth="1.5">
         <Path d="M3 5v16" strokeLinecap="round" />
         <Path d="M3 16h18M3 7h18M18 16V7M14 16V7M10 16V7M6 16V7M3 19h18" />
         <Path

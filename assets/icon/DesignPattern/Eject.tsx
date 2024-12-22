@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const Eject = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Path
           d="M19 14H5l6.21-7.985a1 1 0 0 1 1.58 0z"
           strokeLinejoin="round"

@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const MoonSat = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeWidth="1.5">
         <Circle cx="12" cy="12" r="10" />
         <Path d="M7.633 3.067A3.001 3.001 0 1 1 4.018 6.32M22 13.05a3.5 3.5 0 1 0-3 5.914" />
         <Path

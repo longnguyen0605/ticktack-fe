@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const ScaleFrameReduce = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeLinejoin="round">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeLinejoin="round">
         <Path
           d="M11 15v-1.4a.6.6 0 0 0-.6-.6H9M6 13H3M11 18v3"
           strokeWidth="1.5"

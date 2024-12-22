@@ -5,7 +5,7 @@ interface IProps extends SvgProps {}
 export const PngFormat = (props: IProps) => {
   return (
     <Svg width="24" height="24" fill="none" viewBox="0 0 24 24" {...props}>
-      <G stroke="#131927" strokeLinecap="round" strokeWidth="1.5">
+      <G stroke={props.stroke?props.stroke:"#131927"} strokeLinecap="round" strokeWidth="1.5">
         <Path
           d="M4.5 15v-3m0 0V9h3v3zM10.5 15V9l3 6V9M19.5 9h-3v6h3v-2.4"
           strokeLinejoin="round"
