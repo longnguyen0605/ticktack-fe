@@ -10,6 +10,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { Medal } from "@/assets/icon/DesignPattern/Medal";
 import AppItem from "../AppItem";
 import { ScrollView } from "react-native-gesture-handler";
+import ProfileParamList from "@/app/(profile)/paramList";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
 
 
 interface IAchievementData{
@@ -39,6 +42,7 @@ const ProfileHome = () =>{
     const [avatarURI, setAvatarURI] =  useState(defaultAvatarURI);
     const [userData, setUSerData] = useState<IUserData>()
     
+    const navigator = useNavigation<StackNavigationProp<ProfileParamList>>();
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,7 +62,7 @@ const ProfileHome = () =>{
     }
 
     const openFavScreen = () =>{
-
+        navigator.push("favouriteApps");
     }
 
     const openAchievementScreen = () =>{
@@ -150,8 +154,8 @@ const ProfileHome = () =>{
             </View>
 
             <ScrollView style={styles.showArea}>
-                <ShowTab title="My Favourite Apps">
-                    {userData?.favAppList.map((app, index)=> 
+                <ShowTab title="My Favourite Apps" onOpenBtn={openFavScreen}>
+                    {userData?.favAppList.slice(0, 3).map((app, index)=> 
                         <AppItem id={app.id} appName={app.appName} logoURL={app.logoURI}
                                 description={`Using time: ${app.usingTime} hours`}
                         />
