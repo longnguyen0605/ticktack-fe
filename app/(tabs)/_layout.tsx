@@ -4,6 +4,8 @@ import SuggestionLayout from "../(suggestion)/_layout";
 import { StyleSheet } from "react-native";
 import { HomeSimpleDoor } from "@/assets/icon/DesignPattern/HomeSimpleDoor";
 import { ReportColumns } from "@/assets/icon/DesignPattern/ReportColumns";
+import ProfileLayout from "../(profile)/_layout";
+import { ProfileCircle } from "@/assets/icon/DesignPattern/ProfileCircle";
 
 
 
@@ -31,6 +33,14 @@ export default function TabLayout() {
             title:"Suggestion",
             tabBarIcon: ({ color, size }) => (
               <ReportColumns  width={size} height={size} stroke={color} />
+            ),
+          }}
+        />
+        <Tab.Screen name="profile" component={ProfileLayout}
+          options={{
+            title:"Profile",
+            tabBarIcon: ({ color, size }) => (
+              <ProfileCircle  width={size} height={size} stroke={color} />
             ),
           }}
         />

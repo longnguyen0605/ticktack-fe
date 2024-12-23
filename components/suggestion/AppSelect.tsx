@@ -46,7 +46,7 @@ const AppSelect = (props: AppSelectProps) =>{
     }, []);
    
     const handleEdit = () =>{
-        navigator.navigate('appEdit', {id:props.id})
+        navigator.navigate('appEdit', {categoryId:props.id})
     }
 
     return(

@@ -7,9 +7,9 @@ type AppEditScreenRouteProp = RouteProp<SuggestionParamList, 'appEdit'>;
 
 
 export default function AppEditScreen({route} : {route: AppEditScreenRouteProp}){
-    const {id} = route.params;
+    const {categoryId} = route.params;
     return(
-        <AppEdit id={id}/>
+        <AppEdit id={categoryId}/>
  
     )
 }
