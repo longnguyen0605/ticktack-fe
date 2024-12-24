@@ -13,7 +13,8 @@ export default function Onboarding() {
       <Text>
         Welcome to TickTack
       </Text>
-      <Link href='/(onboarding)/onboarding1'>Next</Link>
+      {/* <Link href='/(onboarding)/onboarding1'>Next</Link> */}
+      <Link href='/(tabs)/home'>Next</Link>
       
     </View>
   </SafeAreaView>)

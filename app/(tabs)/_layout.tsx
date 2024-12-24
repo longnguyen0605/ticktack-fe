@@ -38,16 +38,20 @@ export default function TabLayout() {
             ),
           }}
         />          
-        <Tab.Screen name="profile" component={ProfileLayout}
-          options={{
-            title:"Profile",
-            tabBarIcon: ({ color, size }) => (
-              <ProfileCircle  width={size} height={size} stroke={color} />
+        
         <Tab.Screen name="Reports" component={Dashboard}
           options={{
             title:"Statistic",
             tabBarIcon: ({ color, size }) => (
               <Reports  width={size} height={size} stroke={color} />
+            ),
+          }}
+        />
+        <Tab.Screen name="profile" component={ProfileLayout}
+          options={{
+            title:"Profile",
+            tabBarIcon: ({ color, size }) => (
+              <ProfileCircle  width={size} height={size} stroke={color} />
             ),
           }}
         />
