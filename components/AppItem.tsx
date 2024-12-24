@@ -10,9 +10,9 @@ import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 
 interface AppItemProps{
     id: number,
-    appName: string,
+    appName?: string,
     description?: string,
-    logoURL: string,
+    logoURL?: string,
     height?: number,
     bgColor?: string,
     mode?: "none" | "select" | "delete",
