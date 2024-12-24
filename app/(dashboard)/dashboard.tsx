@@ -1,14 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-const AuthLayout = () => {
+import Dashboard from '@/components/dashboard';
+const DashboardScreen = () => {
   return (
-    <View>
-      <Text>AuthLayout</Text>
-    </View>
+    <Dashboard />
   );
 }
 
 const styles = StyleSheet.create({})
 
-export default AuthLayout;
+export default DashboardScreen;

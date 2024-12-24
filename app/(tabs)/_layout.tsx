@@ -1,10 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./home";
 import SuggestionLayout from "../(suggestion)/_layout";
+import Dashboard from "../(dashboard)/dashboard";
 import { StyleSheet } from "react-native";
 import { HomeSimpleDoor } from "@/assets/icon/DesignPattern/HomeSimpleDoor";
 import { ReportColumns } from "@/assets/icon/DesignPattern/ReportColumns";
-
+import { Reports } from "@/assets/icon/DesignPattern/Reports";
 
 
 const Tab = createBottomTabNavigator();
@@ -31,6 +32,14 @@ export default function TabLayout() {
             title:"Suggestion",
             tabBarIcon: ({ color, size }) => (
               <ReportColumns  width={size} height={size} stroke={color} />
+            ),
+          }}
+        />
+        <Tab.Screen name="Reports" component={Dashboard}
+          options={{
+            title:"Statistic",
+            tabBarIcon: ({ color, size }) => (
+              <Reports  width={size} height={size} stroke={color} />
             ),
           }}
         />
