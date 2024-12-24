@@ -1,16 +1,17 @@
 import { RouteProp } from "@react-navigation/native";
 import { Text } from "react-native";
 import SuggestionParamList from "./paramList";
+import AppPlanning from "@/components/suggestion/AppPlanning";
 
 
 
-type AppSelectScreenRouteProp = RouteProp<SuggestionParamList, 'appSelect'>;
+type AppPlanningScreenRouteProp = RouteProp<SuggestionParamList, 'appPlanning'>;
 
 
-export default function AppPlanningScreen(){
-    //const {id} = route.params;
+export default function AppPlanningScreen({route} : {route:AppPlanningScreenRouteProp}){
+    const {id} = route.params;
     return(
-        <Text>Hello</Text>
+        <AppPlanning id={id} />
  
     )
 }

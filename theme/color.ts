@@ -5,5 +5,6 @@ export const color = {
   secondary: '#FFAA00',
   subText: '#6D717F',
   grayBg: '#F0F0F0',
-  primaryBg: "#C8CEFC"
+  primaryBg: "#C8CEFC",
+  buttonBg: "#3745AF"
 }

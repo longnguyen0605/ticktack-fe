@@ -9,8 +9,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import SuggestionParamList from "@/app/(suggestion)/paramList";
 import { useNavigation } from "@react-navigation/native";
 
-
-const SuggestionHeader = () =>{
+interface SuggestionHeaderProps{
+    searching?: boolean,
+}
+const SuggestionHeader = (props: SuggestionHeaderProps) =>{
 
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
 
@@ -19,7 +21,8 @@ const SuggestionHeader = () =>{
     }
 
     const handleSearch =  () =>{
-
+        if (!props.searching) return;
+        
     }
     return(
         <View style={styles.container}>
@@ -29,43 +32,53 @@ const SuggestionHeader = () =>{
 
             <View style={styles.logoContainer}>
                 <Logo />
-            </View> 
+            </View>    
 
-            <TouchableOpacity style={styles.btnContainer} onPress={handleSearch}>
-                <Search/>
-            </TouchableOpacity>
-        </View>
+            {props.searching ? (
+                <TouchableOpacity style={styles.btnContainer}>
+                    <Search />
+                </TouchableOpacity>
+            ) : (
+                <View style={styles.placeholder} />
+            )}
+        </View> 
     );
 
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         width: "100%",
         height: 100,
         marginTop: 15,
-        borderBottomWidth: 1,   
+        borderBottomWidth: 1,
         borderColor: "#336D717F",
         flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"  
-             
+        alignItems: "center",
+        justifyContent: "space-between"
+     
     },
 
-    btnContainer:{
-        width:50,
-        height:50,
-        justifyContent:"center",
-        alignItems:"center",
+    btnContainer: {
+        width: 50,
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "#E5E0E0",
         borderWidth: 1,
         borderRadius: 100,
-        borderColor: "#E5E0E0"
-        
+        borderColor: "#E5E0E0",     
+       
+    },
+    placeholder:{
+        width: 50,
+        height: 50, 
     },
 
-    logoContainer:{
+    logoContainer: {
     
+        //justifyContent:"center",
+        alignItems:"center",
     },
 
 

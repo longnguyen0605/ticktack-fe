@@ -6,6 +6,7 @@ import AppSelectScreen from './appSelect';
 import CategoryMenuScreen from './categoryMenu';
 import SuggestionParamList from './paramList';
 import AppPlanningScreen from './appPlanning';
+import AppEditScreen from './appEdit';
 
 
 const Stack = createStackNavigator<SuggestionParamList>();
@@ -16,11 +17,13 @@ const SuggestionLayout = () => {
         screenOptions={{
             headerShown: false,
             animation: "slide_from_right",
+            
         }}    
     >
         <Stack.Screen name='categoryMenu' component={CategoryMenuScreen}  />
         <Stack.Screen name='appSelect' component={AppSelectScreen}/>
         <Stack.Screen name='appPlanning' component={AppPlanningScreen}/>
+        <Stack.Screen name='appEdit' component={AppEditScreen}/>
     </Stack.Navigator>  
   );
 }

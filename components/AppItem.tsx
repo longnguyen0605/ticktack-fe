@@ -2,22 +2,55 @@ import { Play } from "@/assets/icon/DesignPattern/Play";
 import { textStyle } from "@/theme/textStyle";
 import { Image, StyleSheet , Text, TouchableOpacity, View} from "react-native";
 import { color } from "@/theme/color";
-import Logo from "../ui/Logo";
+import Logo from "./ui/Logo";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import SuggestionParamList from "@/app/(suggestion)/paramList";
+import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 
 interface AppItemProps{
     id: number,
     appName: string,
-    logoURL: string
+    description?: string,
+    logoURL: string,
+    height?: number,
+    bgColor?: string,
+    mode?: "none" | "select" | "delete",
+    onDelete?: (id:number) => void 
+    
 }
 
 const AppItem = (props: AppItemProps) =>{
 
+    const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
-    const handleBtnPress = ()=>{
+    const selectPlanning =() =>{
+        navigator.navigate('appPlanning', {id:props.id})
+    }
 
+    const handleDelete = () => {
+        if (props.mode=="delete" && props.onDelete) props.onDelete(props.id);
+    }
+
+    const handleBtnPress = ()=>{
+        if (!props.mode || props.mode=="none"){
+            return;
+        }
+        
+        if (props.mode=="select"){
+            selectPlanning();
+        }
+        
+        if (props.mode=="delete"){
+            handleDelete();
+        }
+        
     }
     return(
-    <View style={styles.container}>
+        <View style={{...styles.container,
+                        backgroundColor: props.bgColor || color.primaryBg ,
+                        height: props.height ? props.height : "auto",}} 
+        >
 
         <View style={styles.logoContainer}>
             <Image 
@@ -29,13 +62,14 @@ const AppItem = (props: AppItemProps) =>{
 
         <View style={styles.textContainer}>
         <Text style={{...textStyle.title, ...styles.title,}}>{props.appName}</Text>
-            <Text style={{...textStyle.subText, ...styles.subtitle,}}>Recommendation: 1 hour per day</Text>
+            <Text style={{...textStyle.subText, ...styles.subtitle,}}>{props.description}</Text>
         </View>
-
+        
         <TouchableOpacity 
             onPress={handleBtnPress}
-        >
-            <Play  height={30} width={30} stroke={color.primary} />
+        >       
+            {props.mode=="select" && <Play  height={30} width={30} stroke={color.primary} />}
+            {props.mode=="delete" && <DeleteCircle  height={30} width={30} stroke={color.subText} />}
         </TouchableOpacity>
         
     </View>    
