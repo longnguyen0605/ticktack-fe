@@ -8,9 +8,9 @@ type AppSelectScreenRouteProp = RouteProp<SuggestionParamList, 'appSelect'>;
 
 
 export default function AppSelectScreen({route} : {route: AppSelectScreenRouteProp}){
-    const {id} = route.params;
+    const {categoryId} = route.params;
     return(
-        <AppSelect id={id}/>
+        <AppSelect id={categoryId}/>
  
     )
 }

@@ -9,9 +9,9 @@ type AppPlanningScreenRouteProp = RouteProp<SuggestionParamList, 'appPlanning'>;
 
 
 export default function AppPlanningScreen({route} : {route:AppPlanningScreenRouteProp}){
-    const {id} = route.params;
+    const {appId} = route.params;
     return(
-        <AppPlanning id={id} />
+        <AppPlanning id={appId} />
  
     )
 }
