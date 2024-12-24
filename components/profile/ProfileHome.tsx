@@ -13,11 +13,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import ProfileParamList from "@/app/(profile)/paramList";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
+import AchievementItem from "./AchievementItem";
+import SettingPopupMenu from "./SettingPopupMenu";
+import { MenuProvider } from "react-native-popup-menu";
 
 
-interface IAchievementData{
 
-}
 
 interface IFavAppData{
     id: number,
@@ -26,11 +27,19 @@ interface IFavAppData{
     usingTime: number,
 }
 
+interface IAchievement{
+    id: number,
+    name: string,
+    threshHold: number,
+    currProcess: number,
+
+}
+
 interface IUserData{
     userName: string,
     joinYear: number,
     achievementNum: number,
-    achievementList?: undefined,
+    achievementList: IAchievement[],
     avatarURI?:string,
     favAppList: IFavAppData[],  
 }
@@ -57,8 +66,12 @@ const ProfileHome = () =>{
         }
       };
 
-    const onSettingBtn = () =>{
+    const  handleLogout = () => {
 
+    }
+      
+    const handleContact = () =>{
+        
     }
 
     const openFavScreen = () =>{
@@ -66,7 +79,7 @@ const ProfileHome = () =>{
     }
 
     const openAchievementScreen = () =>{
-
+        navigator.push("achievements");
     }
 
     const handleSetAvatar = () =>{
@@ -89,6 +102,10 @@ const ProfileHome = () =>{
                     {id: 0, appName: "Youtube", usingTime: 1, logoURI: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
                     {id: 1, appName: "Facebook",usingTime: 2, logoURI: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
                     {id: 2, appName: "Tiktok", usingTime: 3, logoURI: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
+                ],
+                achievementList: [
+                    {id: 0,name: "10 hours study", threshHold: 10, currProcess: 10, },
+                    {id:1, name: "20 hours study", threshHold: 20, currProcess: 10, },
                 ]
             }
             //
@@ -99,12 +116,18 @@ const ProfileHome = () =>{
       }, []);
 
     return (
+        <MenuProvider>
         <SafeAreaView style={styles.container}>
+
             <View style={styles.titleContainer}>
                 <Text style={{...textStyle.title, ...styles.title}}>Profile</Text>
-                <TouchableOpacity style={styles.settingBtn} onPress={onSettingBtn}>
+                {/* <TouchableOpacity style={styles.settingBtn} onPress={onSettingBtn}>
                     <Settings />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <SettingPopupMenu 
+                    handleContact={handleContact}
+                    handleLogout={handleLogout}
+                />
             </View>
             <View style={styles.infoContainer}>
                 <Avatar 
@@ -152,18 +175,34 @@ const ProfileHome = () =>{
                     </View>
                 </View>
             </View>
-
-            <ScrollView style={styles.showArea}>
-                <ShowTab title="My Favourite Apps" onOpenBtn={openFavScreen}>
-                    {userData?.favAppList.slice(0, 3).map((app, index)=> 
-                        <AppItem id={app.id} appName={app.appName} logoURL={app.logoURI}
-                                description={`Using time: ${app.usingTime} hours`}
-                        />
+            
+            <ScrollView style={styles.showArea} showsVerticalScrollIndicator={false}>
                 
-                    )}
-                </ShowTab>
+                <View style={styles.tabContainer}>
+                    <ShowTab title="My Achievement" onOpenBtn={openAchievementScreen}>
+                        {userData?.achievementList.slice(0, 3).map((achive, index)=> 
+                            <AchievementItem key={index} id={achive.id} achievementName={achive.name} 
+                                    threshHold={achive.threshHold} currProcess={achive.currProcess}
+                            />
+                    
+                        )}
+                    </ShowTab>
+                </View>
+
+                <View style={styles.tabContainer}>
+                    <ShowTab title="My Favourite Apps" onOpenBtn={openFavScreen}>
+                        {userData?.favAppList.slice(0, 3).map((app, index)=> 
+                            <AppItem key={index} id={app.id} appName={app.appName} logoURL={app.logoURI}
+                                    description={`Using time: ${app.usingTime} hours`}
+                            />
+                    
+                        )}
+                    </ShowTab>
+                </View>
+                
             </ScrollView>
         </SafeAreaView>
+        </MenuProvider>
     );
 }
 
@@ -213,11 +252,14 @@ const styles = StyleSheet.create({
     },
     
     showArea:{
-        marginTop: 20,
+        marginTop: 5,
         flexDirection:"column",
-        width:"100%"
+        width:"100%",
         
         
+    },
+    tabContainer:{
+        marginTop: 16,
     }
 
 

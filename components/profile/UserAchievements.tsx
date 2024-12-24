@@ -12,19 +12,18 @@ import ProfileParamList from "@/app/(profile)/paramList";
 import { textStyle } from "@/theme/textStyle";
 import { useEffect, useState } from "react";
 import AppItem from "../AppItem";
+import AchievementItem from "./AchievementItem";
 
 
-
-interface IFavAppData{
+interface IUserAchievements{
     id: number,
-    appName: string,
-    logoURI:string,
-    usingTime: number,
+    name : string,
+    threshHold: number, 
+    currProcess: number,
 }
+const UserAchievements = () =>{
 
-const FavouriteApps = () =>{
-
-    const [favApps, setFavApps] = useState<IFavAppData[]>();
+    const [achievements, setAchievements] = useState<IUserAchievements[]>();
 
     const navigator = useNavigation<StackNavigationProp<ProfileParamList>>();
 
@@ -36,14 +35,13 @@ const FavouriteApps = () =>{
         const loadFavApps = async () =>{
             // Fetch user data
 
-            const  favAppList : IFavAppData[] =[
-                    {id: 0, appName: "Youtube", usingTime: 1, logoURI: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
-                    {id: 1, appName: "Facebook",usingTime: 2, logoURI: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
-                    {id: 2, appName: "Tiktok", usingTime: 3, logoURI: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
-                ]
+            const  achievementList : IUserAchievements[] = [
+                {id: 0, name: "10 hours study", threshHold: 10, currProcess: 10, },
+                {id:1, name: "20 hours study", threshHold: 20, currProcess: 10, },
+            ]
             
             //
-            setFavApps(favAppList) 
+            setAchievements(achievementList) 
         }
 
         loadFavApps()
@@ -58,15 +56,23 @@ const FavouriteApps = () =>{
                 <NavArrowLeft />
             </TouchableOpacity>
 
-            <Text style={{...textStyle.title,...styles.title}}>My Favourite Apps</Text>
+            <Text style={{...textStyle.title,...styles.title}}>My Achievements</Text>
             
         </View> 
-            <FlatList
-                data={favApps}
-                style={styles.contents}
-                renderItem={({item}) => <AppItem id={item.id} appName={item.appName} logoURL={item.logoURI}
-                description={`Using time: ${item.usingTime} hours`}/>}
-            ></FlatList>      
+        
+        <FlatList
+            data={achievements}
+            style={styles.contents}
+            renderItem={({item}) => 
+                <AchievementItem 
+                    id={item.id} 
+                    achievementName={item.name} 
+                    threshHold={item.threshHold}
+                    currProcess={item.currProcess}
+            />}
+        >
+        </FlatList>  
+           
         </SafeAreaView> 
     );
 
@@ -116,4 +122,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default FavouriteApps;
+export default UserAchievements;

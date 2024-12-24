@@ -1,7 +1,7 @@
 type ProfileParamList = {
     profileHome: undefined;
     favouriteApps: undefined,
-
+    achievements: undefined,
   };
 
 
