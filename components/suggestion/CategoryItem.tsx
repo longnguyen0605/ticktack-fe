@@ -6,7 +6,7 @@ import { NavArrowRight } from "@/assets/icon/DesignPattern/NavArrowRight";
 import React from "react";
 import { textStyle } from "@/theme/textStyle";
 import { useNavigation } from "@react-navigation/native";
-import SuggestionParamList from "@/app/(suggestion)/paramList";
+import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 interface CategoryItemProps{

@@ -6,39 +6,41 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
-const ProfileNoLogin = () => {
-
+const ContactUs = () => {
 
     const router = useRouter();
-
-    const handleLogin = () =>{
-        router.push("/(auth)/login")
+    const handleBackHome = () =>{
+        router.navigate("/(tabs)/home");
     }
 
-    const handleContact = () =>{
-        router.navigate("/contactUs")
-    }
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={{...textStyle.title, ...styles.title}}>Profile</Text>
+                <Text style={{...textStyle.title, ...styles.title}}>Contact Us</Text>
                 
             </View> 
             <Image
                 source={require("../../assets/images/ProfilePic.png")} 
                 style={styles.image}
             />
-            <Text style={{...textStyle.title, fontSize:24}}>Do you want to login?</Text>
+            <View style={styles.textContainer}>
+                <Text style={styles.label}>
+                    Email:{" "} 
+                <Text style={styles.link} >
+                    ticktack.support@gmail.com
+                </Text>
+                </Text>
+                <Text style={styles.label}>
+                    Phone:{" "}  
+                    <Text style={styles.link} >
+                    19001969
+                    </Text>
+                </Text>
+            </View>
+            
             <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.btn}
-                    onPress={handleLogin}
-                >
-                    <Text style={{...styles.btnText, color:"white"}}>Login Now</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{...styles.btn, backgroundColor:"white"}} 
-                    onPress={handleContact}
-                >
-                    <Text style={{...styles.btnText, color:color.primary}}>Contact Us</Text>
+                <TouchableOpacity style={styles.btn} onPress={handleBackHome}>
+                    <Text style={{...styles.btnText, color:"white"}}>Back to Home</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -96,7 +98,22 @@ const styles = StyleSheet.create({
     btnText:{
         fontSize: 16,
         textAlign:"center"
-    }
+    },
+    textContainer: {
+        padding: 16,
+        
+    },
+    label: {
+        fontSize: 18,
+        marginBottom: 20,
+        color: color.primary,
+        fontWeight:"bold",
+        
+    },
+    link: {
+        color: color.subText, // Blue color for links
+        fontSize: 16,
+    },
 })
 
-export default ProfileNoLogin;
+export default ContactUs;

@@ -5,7 +5,7 @@ import { color } from "@/theme/color";
 import Logo from "./ui/Logo";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import SuggestionParamList from "@/app/(suggestion)/paramList";
+import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 
 interface AppItemProps{

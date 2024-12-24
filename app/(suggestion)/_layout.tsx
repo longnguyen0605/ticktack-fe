@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import AppSelectScreen from './appSelect';
 import CategoryMenuScreen from './categoryMenu';
-import SuggestionParamList from './paramList';
+import SuggestionParamList from './_paramList';
 import AppPlanningScreen from './appPlanning';
 import AppEditScreen from './appEdit';
 

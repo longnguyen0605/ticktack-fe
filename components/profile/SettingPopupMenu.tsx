@@ -17,7 +17,7 @@ const SettingPopupMenu = (props: SettingPopupMenuProps) =>{
     }
 
     const onContactBtn = () =>{
-
+        props.handleContact();
     }
     return (
         (
