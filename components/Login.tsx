@@ -7,24 +7,65 @@ import UserIcon from '@/assets/images/User.svg';
 import KeyIcon from '@/assets/images/Pass.svg';
 import GoogleIcon from '@/assets/images/Google.svg'; 
 import FacebookIcon from '@/assets/images/Facebook.svg'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
 
-  const handleLogin = () => {
-    const validUsername = 'admin';
-    const validPassword = '1234';
-
-    if (username === validUsername && password === validPassword) {
-      setLoginFailed(false);
-      console.log('Login Successful');
-      router.navigate('/home');
-    } else {
+  const handleLogin = async () => {
+    AsyncStorage.removeItem('jwtToken');
+    // Replace with your API endpoint
+    const loginApiUrl = 'https://ticktak-backend.onrender.com/auth/sign-in';
+  
+    // Reset error state
+    setLoginFailed(false);
+  
+    // Prepare payload
+    const payload = {
+      username: username,
+      password: password,
+    };
+  
+    try {
+      // Send login request
+      const response = await fetch(loginApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (response.ok) {
+        // Parse the response
+        const data = await response.json();
+        const jwtToken =data.data.access_token;
+        
+        if (jwtToken) {
+          // Store JWT token in AsyncStorage
+          await AsyncStorage.setItem('jwtToken', jwtToken);
+          console.log('JWT Token stored successfully:', jwtToken);
+  
+          // Navigate to the home screen
+          console.log('Login Successful');
+          router.navigate('/home');
+        } else {
+          throw new Error('JWT Token not found in response headers.');
+        }
+      } else {
+        // Handle login failure
+        setLoginFailed(true);
+        console.log('Login Failed');
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('Error during login:', error);
       setLoginFailed(true);
-      console.log('Login Failed');
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>

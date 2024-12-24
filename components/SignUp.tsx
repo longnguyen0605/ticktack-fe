@@ -15,6 +15,7 @@ import KeyIcon from '@/assets/images/Pass.svg';
 import ConfirmIcon from '@/assets/images/ConfirmPass.svg'; 
 import GoogleIcon from '@/assets/images/Google.svg'; 
 import FacebookIcon from '@/assets/images/Facebook.svg'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -25,7 +26,7 @@ const SignUp = () => {
   const [usernameError, setUsernameError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     let hasError = false;
 
     // Reset errors before validating
@@ -39,16 +40,62 @@ const SignUp = () => {
     }
 
     // Validate Passwords
-    if (!password || !confirmPassword) {
-      // If either password is empty, show a message.
-      setConfirmPasswordError('All fields are required');
-      hasError = true;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError('Not matching');
-      hasError = true;
-    }
+    // if (!password || !confirmPassword) {
+    //   // If either password is empty, show a message.
+    //   setConfirmPasswordError('All fields are required');
+    //   hasError = true;
+    // } else if (password !== confirmPassword) {
+    //   setConfirmPasswordError('Not matching');
+    //   hasError = true;
+    // }
 
     // If no errors, proceed
+
+
+    const payload = {
+      username: username,
+      password: password,
+      name: username,
+      avatarURL: "https://172.0.0.1",
+      medal: 100, 
+    };
+    var message="Not matching";
+    try{
+      const response = await fetch('https://ticktak-backend.onrender.com/auth/sign-up', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      if (!response.ok) {
+        // Handle HTTP errors
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong!');
+      }
+  
+      // Retrieve JWT token from response headers
+      const data =response.json();
+
+      message=data.message;
+      const jwtToken = data.data.access_token;
+  
+      if (jwtToken) {
+        await AsyncStorage.setItem('jwtToken', jwtToken);
+        console.log('JWT Token stored successfully:', jwtToken);
+      } else {
+        throw new Error('JWT Token not found in response headers.');
+      }
+  
+      console.log('Sign Up Successful:', data);
+      // Navigate to home page
+      router.navigate('/home');
+    }
+    catch{
+      setConfirmPasswordError(message);
+      hasError = true;
+    }
     if (!hasError) {
       console.log('Sign Up Successful:', username);
       router.navigate('/home'); 

@@ -13,31 +13,38 @@
   import { Ionicons } from '@expo/vector-icons';
   import { Picker } from '@react-native-picker/picker';
   import MedalIcon from '@/assets/images/medal.svg';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
   export default function HomeScreen() {
-    /*******************************
-     * STATE
-     *******************************/
-    const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
-    const [isRunning, setIsRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
+  const [isRunning, setIsRunning] = useState(false);
+  const [medalCount, setMedalCount] = useState(0); 
+  const [showRewardScreen, setShowRewardScreen] = useState(false);
+  const [showGiveUpModal, setShowGiveUpModal] = useState(false);
+  const [showPlanningModal, setShowPlanningModal] = useState(false);
+  const [selectedTab, setSelectedTab] = useState('planning'); // Planning or Favourite tab
+  const [activity, setActivity] = useState('Study');
+  const [focusedTime, setFocusedTime] = useState(25);
+  const [todayQuote, setTodayQuote] = useState(
+    'One day, all your hard work will pay off'
+  );
 
-    const [showRewardScreen, setShowRewardScreen] = useState(false);
-    const [showGiveUpModal, setShowGiveUpModal] = useState(false);
-    const [showPlanningModal, setShowPlanningModal] = useState(false);
+  const [showQuote, setShowQuote] = useState(false);
 
-    const [selectedTab, setSelectedTab] = useState('planning'); // Planning or Favourite tab
-    const [activity, setActivity] = useState('Study');
-    const [focusedTime, setFocusedTime] = useState(25);
-    const [todayQuote, setTodayQuote] = useState(
-      'One day, all your hard work will pay off'
-    );
-
-    const [showQuote, setShowQuote] = useState(false);
-
-    const timeOptions = [10, 15, 20, 25, 30, 35, 40];
+  const timeOptions = [10, 15, 20, 25, 30, 35, 40];
 
     /*******************************
      * SIDE EFFECTS
      *******************************/
+    useEffect(() => {
+      (async () => {
+        try {
+          await fetchMedalCount(); // Fetch medal count when the component mounts
+        } catch (error) {
+          console.error('Error during fetchMedalCount execution:', error);
+        }
+      })();
+    }, []);
+  
     useEffect(() => {
       let intervalId = null;
       if (isRunning && timeLeft > 0) {
@@ -52,6 +59,8 @@
       if (timeLeft === 0 && isRunning) {
         setIsRunning(false);
         setShowRewardScreen(true);
+        setMedalCount(focusedTime+medalCount);
+        updateMedalCount();
       }
     }, [timeLeft, isRunning]);
 
@@ -103,12 +112,73 @@
       setShowPlanningModal(false);
     };
 
+    const fetchMedalCount = async () => {
+      const token = await AsyncStorage.getItem('jwtToken');
+      console.log(token);
+      try {
+        const response = await fetch('https://ticktak-backend.onrender.com/user', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setMedalCount(data.data.medal); 
+        } else {
+          setMedalCount(0);
+          throw new Error('Failed to fetch medal count');
+          
+        }
+        console.log(medalCount);
+      } catch (error) {
+        setMedalCount(20);
+        console.error('Error fetching medal count:', error);
+      }
+      
+    };
+    var newMedalCount=medalCount+10
+    // Update medal count after completing planning
+    const updateMedalCount = async () => {
+      const token = await AsyncStorage.getItem('jwtToken');
+      console.log(token);
+      try {
+        const response = await fetch('https://ticktak-backend.onrender.com/user', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ medal: newMedalCount }), // Increment medal count by 1
+        });
+  
+        if (response.ok) {
+          setMedalCount(newMedalCount);
+        } else {
+          throw new Error('Failed to update medal count');
+        }
+      } catch (error) {
+        console.error('Error updating medal count:', error);
+      }
+    };
+
     /*******************************
      * RENDER
      *******************************/
     return (
       <SafeAreaView style={styles.container}>
         {showRewardScreen ? (
+          <>
+                      <View style={styles.header}>
+                      <Text style={styles.headerTitle}>Home</Text>
+                        <View style={styles.medalContainer}>
+                          <MedalIcon width={20} height={20} style={styles.icon} />
+                          <Text style={styles.medalText}>{medalCount}</Text>
+                        </View>
+                    </View>
           <View style={styles.rewardContainer}>
             <Text style={styles.rewardCongratsText}>Hooray!!! Congratulations</Text>
             <Image
@@ -121,19 +191,21 @@
               onPress={() => {
                 setShowRewardScreen(false);
                 setTimeLeft(focusedTime * 60);
+                setShowQuote(false);
               }}
             >
               <Text style={styles.receiveButtonText}>Receive</Text>
             </TouchableOpacity>
           </View>
+          </>
         ) : (
           <>
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Home</Text>
                 <View style={styles.medalContainer}>
-                <MedalIcon width={20} height={20} style={styles.icon} />
-                <Text style={styles.medalText}>10</Text>
-              </View>
+                  <MedalIcon width={20} height={20} style={styles.icon} />
+                  <Text style={styles.medalText}>{medalCount}</Text>
+                </View>
             </View>
 
             {showQuote && (
@@ -435,6 +507,7 @@
       justifyContent: 'space-between',
       paddingHorizontal: 20,
       paddingTop: 30,
+      marginTop:10,
       marginBottom: 10,
     },
     headerTitle: {
@@ -443,6 +516,9 @@
       color: '#4C5DFA',
     },
     medalContainer: {
+      backgroundColor: '#EEEEEE',
+      borderRadius:20,
+      padding: 3,
       flexDirection: 'row',
       alignItems: 'center',
     },
