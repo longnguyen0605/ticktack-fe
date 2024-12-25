@@ -1,6 +1,7 @@
 import { color } from "@/theme/color";
-import { Modal, View, StyleSheet , Text, TouchableOpacity } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+import { Modal, View, StyleSheet , Text, TouchableOpacity, TextInput } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
 
@@ -12,32 +13,39 @@ interface AddAppModelProps{
 
 const AddAppModel =  (props: AddAppModelProps) =>{
 
-    const fakeData = [
-        {label: "App 1", value: "1"},
-        {label: "App 2", value: "2"},
+    const timeData = [
+        {label: "15", value: 15},
+        {label: "20", value: 20},
+        {label: "25", value: 25},
+        {label: "30", value: 30},
+        {label: "35", value: 35},
+        {label: "40", value: 40},
+        {label: "45", value: 45},
+        {label: "50", value: 50},
+        {label: "55", value: 55},
+        {label: "60", value: 60}
     ]
 
-    const timeData = [
-        {label: "5", value: "5"},
-        {label: "10", value: "10"},
-        {label: "15", value: "15"},
-        {label: "20", value: "20"},
-        {label: "25", value: "25"},
-        {label: "30", value: "30"},
-        {label: "35", value: "35"},
-        {label: "40", value: "40"},
-        {label: "45", value: "45"},
-        {label: "50", value: "50"},
-        {label: "55", value: "55"},
-        {label: "60", value: "60"}
-    ]
+    const [appName, setAppName] = useState('');
+    const [time, setTime] = useState(15);
 
     const onCancel = () =>{
         props.onRequestClose(false)
     }
 
-    const onAdd = () =>{
-
+    const onAdd = async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        const response = await fetch(`https://ticktak-backend.onrender.com/my-app/${appName}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            categoryId: '1', // truyền categoryId
+            recommendedUsage: time
+          })
+        });
     }
 
 
@@ -57,12 +65,12 @@ const AddAppModel =  (props: AddAppModelProps) =>{
                             <View>
                                 <Text style={{color: color.primary, fontWeight: 'bold'}}>Your app</Text>
                             </View>
-                            <Dropdown 
+                            <TextInput
                                 style={{borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 12, borderColor: 'transparent', backgroundColor: '#f0f0f0'}}
-                                data={fakeData}
-                                labelField="label"
-                                valueField="value"
-                                onChange={()=>{}}
+                                placeholder="App name"
+                                placeholderTextColor="#888"
+                                value={appName}
+                                onChangeText={setAppName}
                             />
                         </View>
 
@@ -71,9 +79,11 @@ const AddAppModel =  (props: AddAppModelProps) =>{
                             <Dropdown 
                             style={{borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 12, borderColor: 'transparent', backgroundColor: '#f0f0f0'}}
                                 data={timeData}
+                                placeholder="Select time"
                                 labelField="label"
                                 valueField="value"
-                                onChange={()=>{}}
+                                value={{label: time.toString(), value: time}}
+                                onChange={(e)=>{setTime(e.value)}}
                             />
                         </View>
                     </View>

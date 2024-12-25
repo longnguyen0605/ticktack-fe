@@ -47,10 +47,8 @@ const Login = () => {
         if (jwtToken) {
           // Store JWT token in AsyncStorage
           await AsyncStorage.setItem('jwtToken', jwtToken);
-          console.log('JWT Token stored successfully:', jwtToken);
   
           // Navigate to the home screen
-          console.log('Login Successful');
           router.navigate('/home');
         } else {
           throw new Error('JWT Token not found in response headers.');
@@ -58,7 +56,6 @@ const Login = () => {
       } else {
         // Handle login failure
         setLoginFailed(true);
-        console.log('Login Failed');
       }
     } catch (error) {
       // Handle errors

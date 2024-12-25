@@ -2,7 +2,6 @@ import { Play } from "@/assets/icon/DesignPattern/Play";
 import { textStyle } from "@/theme/textStyle";
 import { Image, StyleSheet , Text, TouchableOpacity, View} from "react-native";
 import { color } from "@/theme/color";
-import Logo from "./ui/Logo";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import SuggestionParamList from "@/app/(suggestion)/_paramList";

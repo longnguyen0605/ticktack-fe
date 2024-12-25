@@ -1,11 +1,10 @@
-import { Button, Modal, StyleSheet, Text,TouchableOpacity,View } from "react-native";
+import { Modal, StyleSheet, Text,TouchableOpacity,View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SuggestionHeader from "./SuggestionHeader";
 import AppItem from "../AppItem";
 import { textStyle } from "@/theme/textStyle";
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { EditPencil } from "@/assets/icon/DesignPattern/EditPencil";
 import { color } from "@/theme/color";
 import { AddCircle } from "@/assets/icon/DesignPattern/AddCircle";
 import AddAppModel from "./AddAppModel";
@@ -29,11 +28,6 @@ const AppEdit = (props: AppEditProps) =>{
     const [deleteId, setDeleteId] = useState(-1);
 
     const getAppDataList = () =>{
-
-        // Fetch from API
-        
-
-        //
         setAppDataList([
             {id: 0, appName: "Youtube", logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
             {id: 1, appName: "Facebook", logoURL: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},

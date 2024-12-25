@@ -113,7 +113,6 @@
 
     const fetchMedalCount = async () => {
       const token = await AsyncStorage.getItem('jwtToken');
-      console.log(token);
       try {
         const response = await fetch('https://ticktak-backend.onrender.com/user', {
           method: 'GET',
@@ -125,25 +124,22 @@
   
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setMedalCount(data.data.medal); 
         } else {
           setMedalCount(0);
           throw new Error('Failed to fetch medal count');
           
         }
-        console.log(medalCount);
       } catch (error) {
         setMedalCount(20);
         console.error('Error fetching medal count:', error);
       }
       
     };
-    var newMedalCount=medalCount+10
+    var newMedalCount = medalCount+10
     // Update medal count after completing planning
     const updateMedalCount = async () => {
       const token = await AsyncStorage.getItem('jwtToken');
-      console.log(token);
       try {
         const response = await fetch('https://ticktak-backend.onrender.com/user', {
           method: 'PATCH',
