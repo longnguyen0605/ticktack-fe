@@ -9,30 +9,165 @@ import {
 } from "react-native";
 import { StackedBarChart, PieChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const screenWidth = Dimensions.get("window").width;
+function groupDataByWeek(data) {
+  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const categories = {};
+  if (!Array.isArray(data)) {
+    return {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      categories: {
+        Study: [0, 0, 0, 0, 0, 0, 0],
+        Work: [0, 0, 0, 0, 0, 0, 0],
+        Relax: [0, 0, 0, 0, 0, 0, 0],
+        Sport: [0, 0, 0, 0, 0, 0, 0],
+        Other: [0, 0, 0, 0, 0, 0, 0],
+      } // Return labels with empty categories
+    } // Default to empty array if data is null, undefined, or not an array
+  }
+  if (!data || data.length === 0) {
+    return {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        categories: {
+          Study: [3, 4, 5, 2, 1, 0, 3],
+          Work: [2, 3, 4, 3, 2, 1, 2],
+          Relax: [4, 5, 3, 4, 3, 2, 3],
+          Sport: [1, 1, 2, 1, 1, 1, 1],
+          Other: [1, 1, 1, 1, 1, 1, 3],
+        } // Return labels with empty categories
+      }
+  }
 
-// Mock Data for Latest Schedule (Separated by Day and Category)
-const mockBarData = {
-  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  categories: {
-    Study: [3, 4, 5, 2, 1, 0, 3],
-    Work: [2, 3, 4, 3, 2, 1, 2],
-    Relax: [4, 5, 3, 4, 3, 2, 3],
-    Sport: [1, 1, 2, 1, 1, 1, 1],
-    Other: [1, 1, 1, 1, 1, 1, 3],
-  },
+  // Initialize category arrays with zero values for each day
+  data.forEach((record) => {
+    if (!categories[record.category.name]) {
+      categories[record.category.name] = [0, 0, 0, 0, 0, 0, 0];
+    }
+  });
+
+  // Iterate over the data to populate usage times
+  data.forEach((record) => {
+    const dayOfWeek = new Date(record.createdAt).getDay(); // Get the day of the week (0 = Sun, 6 = Sat)
+    const mappedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Map Sunday (0) to index 6
+    categories[record.category.name][mappedDay] += record.usageTime;
+  });
+
+  return { labels, categories };
+}
+
+const fetchBarData = async () => {
+  const token = await AsyncStorage.getItem('jwtToken');
+  console.log(token);
+  try {
+    const response = await fetch('https://ticktak-backend.onrender.com/record?filter=last7day', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return groupDataByWeek(data)
+    } else {
+      throw new Error('Failed to fetch medal count');
+      
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+  
 };
 
-// Mock Data for Today Schedule
-const mockPieData = [
-  { name: "Study", population: 4, color: "rgba(113, 88, 226, 0.7)" },
-  { name: "Work", population: 2, color: "rgba(252, 92, 101, 0.7)" },
-  { name: "Relax", population: 3, color: "rgba(69, 170, 242, 0.7)" },
-  { name: "Sport", population: 1, color: "rgba(247, 183, 49, 0.7)" },
-  { name: "Other", population: 1, color: "rgba(165, 177, 194, 0.7)" },
-];
 
+// const mockBarData = {
+//   labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+//   categories: {
+//     Study: [3, 4, 5, 2, 1, 0, 3],
+//     Work: [2, 3, 4, 3, 2, 1, 2],
+//     Relax: [4, 5, 3, 4, 3, 2, 3],
+//     Sport: [1, 1, 2, 1, 1, 1, 1],
+//     Other: [1, 1, 1, 1, 1, 1, 3],
+//   },
+// };
+
+
+async function groupTodayData(data) {
+
+  // Initialize the group object for categories and populations
+  const groupedData = {};
+  if (!Array.isArray(data)) {
+    return [
+      { name: "Study", population: 0, color: "rgba(113, 88, 226, 0.7)" },
+      { name: "Work", population: 0, color: "rgba(252, 92, 101, 0.7)" },
+      { name: "Relax", population: 0, color: "rgba(69, 170, 242, 0.7)" },
+      { name: "Sport", population: 0, color: "rgba(247, 183, 49, 0.7)" },
+      { name: "Other", population: 0, color: "rgba(165, 177, 194, 0.7)" },
+    ] // Default to empty array if data is null, undefined, or not an array
+  }
+  if (!data || data.length === 0) {
+    return [
+      { name: "Study", population: 4, color: "rgba(113, 88, 226, 0.7)" },
+      { name: "Work", population: 2, color: "rgba(252, 92, 101, 0.7)" },
+      { name: "Relax", population: 3, color: "rgba(69, 170, 242, 0.7)" },
+      { name: "Sport", population: 1, color: "rgba(247, 183, 49, 0.7)" },
+      { name: "Other", population: 1, color: "rgba(165, 177, 194, 0.7)" },
+    ] // Default to empty array if data is null, undefined, or not an array
+  }
+
+  // Iterate over the data and sum up populations by category
+  data.forEach((record) => {
+    const categoryName = record.category.name;
+    groupedData[categoryName] = (groupedData[categoryName] || 0) + record.usageTime;
+  });
+  
+  // Define colors for each category
+  const categoryColors = {
+    Study: "rgba(113, 88, 226, 0.7)",
+    Work: "rgba(252, 92, 101, 0.7)",
+    Relax: "rgba(69, 170, 242, 0.7)",
+    Sport: "rgba(247, 183, 49, 0.7)",
+    Other: "rgba(165, 177, 194, 0.7)",
+  };
+
+  // Transform grouped data into pie chart format
+  const mockPieData = Object.keys(groupedData).map((categoryName) => ({
+    name: categoryName,
+    population: groupedData[categoryName],
+    color: categoryColors[categoryName] || "rgba(150, 150, 150, 0.7)", // Default color if undefined
+  }));
+
+  return mockPieData;
+}
+const fetchPieData = async () => {
+  const token = await AsyncStorage.getItem('jwtToken');
+  console.log(token);
+  try {
+    const response = await fetch('https://ticktak-backend.onrender.com/record?filter=today', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return groupTodayData(data)
+    } else {
+      throw new Error('Failed to fetch medal count');
+      
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+  
+};
+// Mock Data for Today Schedule
 // Prepare Bar Chart Data
 const prepareStackedBarData = (mockData) => {
   const data = [];
@@ -73,6 +208,8 @@ const prepareStackedBarData = (mockData) => {
     barColors: colors,
   };
 };
+var mockBarData =0;
+var mockPieData =0;
 
 // Dashboard Screen
 const Dashboard = () => {
@@ -82,8 +219,12 @@ const Dashboard = () => {
 
   // Simulate Data Fetching
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async() => {
       try {
+        mockBarData = await fetchBarData();
+        console.log(mockBarData)
+        mockPieData = await fetchPieData();
+        console.log(mockPieData)
         setTimeout(() => {
           // Prepare stacked bar data using the helper function
           setStackedBarData(prepareStackedBarData(mockBarData));
