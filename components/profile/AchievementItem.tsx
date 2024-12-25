@@ -5,7 +5,7 @@ import { color } from "@/theme/color";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
-import ProfileParamList from "@/app/(profile)/paramList";
+import ProfileParamList from "@/app/(profile)/_paramList";
 
 interface AchievementItemProps{
     id: number,

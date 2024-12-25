@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { Text } from "react-native";
-import SuggestionParamList from "./paramList";
+import SuggestionParamList from "./_paramList";
 import AppSelect from "@/components/suggestion/AppSelect";
 
 

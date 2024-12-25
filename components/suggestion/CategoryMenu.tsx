@@ -1,7 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SuggestionParamList from "@/app/(suggestion)/paramList";
+import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { GraduationCap } from "@/assets/icon/DesignPattern/GraduationCap";
 import { textStyle } from "@/theme/textStyle";
 import { color } from "@/theme/color";

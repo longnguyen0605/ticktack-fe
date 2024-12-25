@@ -9,7 +9,7 @@ import { EditPencil } from "@/assets/icon/DesignPattern/EditPencil";
 import { color } from "@/theme/color";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import SuggestionParamList from "@/app/(suggestion)/paramList";
+import SuggestionParamList from "@/app/(suggestion)/_paramList";
 
 
 interface AppSelectProps{

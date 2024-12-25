@@ -1,5 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
-import SuggestionParamList from "./paramList";
+import SuggestionParamList from "./_paramList";
 import AppEdit from "@/components/suggestion/AppEdit";
 
 

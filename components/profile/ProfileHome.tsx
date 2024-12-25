@@ -3,16 +3,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ShowTab from "./ShowTab";
 import { color } from "@/theme/color";
 import { textStyle } from "@/theme/textStyle";
-import { Settings } from "@/assets/icon/DesignPattern/Settings";
 import { Avatar, Accessory } from "react-native-elements";
 import { useEffect, useState } from "react";
 import * as ImagePicker from 'expo-image-picker'; 
 import { Medal } from "@/assets/icon/DesignPattern/Medal";
 import AppItem from "../AppItem";
 import { ScrollView } from "react-native-gesture-handler";
-import ProfileParamList from "@/app/(profile)/paramList";
+import ProfileParamList from "@/app/(profile)/_paramList";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import AchievementItem from "./AchievementItem";
 import SettingPopupMenu from "./SettingPopupMenu";
 import { MenuProvider } from "react-native-popup-menu";
@@ -52,6 +51,7 @@ const ProfileHome = () =>{
     const [userData, setUSerData] = useState<IUserData>()
     
     const navigator = useNavigation<StackNavigationProp<ProfileParamList>>();
+    const router = useRouter()
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -71,7 +71,7 @@ const ProfileHome = () =>{
     }
       
     const handleContact = () =>{
-        
+        router.navigate('/(contact)/contactUs');
     }
 
     const openFavScreen = () =>{
