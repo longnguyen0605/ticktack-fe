@@ -16,6 +16,22 @@ const AddAppModel =  (props: AddAppModelProps) =>{
         {label: "App 1", value: "1"},
         {label: "App 2", value: "2"},
     ]
+
+    const timeData = [
+        {label: "5", value: "5"},
+        {label: "10", value: "10"},
+        {label: "15", value: "15"},
+        {label: "20", value: "20"},
+        {label: "25", value: "25"},
+        {label: "30", value: "30"},
+        {label: "35", value: "35"},
+        {label: "40", value: "40"},
+        {label: "45", value: "45"},
+        {label: "50", value: "50"},
+        {label: "55", value: "55"},
+        {label: "60", value: "60"}
+    ]
+
     const onCancel = () =>{
         props.onRequestClose(false)
     }
@@ -37,20 +53,29 @@ const AddAppModel =  (props: AddAppModelProps) =>{
                 <View style={styles.modalContainer}>
                     <Text style={styles.message}>Add New App</Text>
                     <View >
-                        <Text >Your app</Text>
-                         <Dropdown 
-                            data={fakeData}
-                            labelField="label"
-                            valueField="value"
-                            onChange={()=>{}}
-                         />
-                         <Text >Recommendation Usage</Text>
+                        <View>
+                            <View>
+                                <Text style={{color: color.primary, fontWeight: 'bold'}}>Your app</Text>
+                            </View>
                             <Dropdown 
+                                style={{borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 12, borderColor: 'transparent', backgroundColor: '#f0f0f0'}}
                                 data={fakeData}
                                 labelField="label"
                                 valueField="value"
                                 onChange={()=>{}}
                             />
+                        </View>
+
+                        <View>
+                         <Text style={{color: color.primary, fontWeight: 'bold'}}>Recommendation Usage</Text>
+                            <Dropdown 
+                            style={{borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 12, borderColor: 'transparent', backgroundColor: '#f0f0f0'}}
+                                data={timeData}
+                                labelField="label"
+                                valueField="value"
+                                onChange={()=>{}}
+                            />
+                        </View>
                     </View>
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
@@ -118,7 +143,7 @@ const styles = StyleSheet.create({
         width: 100,
         marginLeft: 10,
         padding: 10,
-        backgroundColor: "#f44336",
+        backgroundColor: color.primary,
         borderRadius: 5,
         alignItems: "center",
         shadowColor: "#000",
