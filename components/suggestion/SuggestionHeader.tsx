@@ -6,7 +6,7 @@ import { NavArrowLeft } from "@/assets/icon/DesignPattern/NavArrowLeft";
 import { Search } from "@/assets/icon/DesignPattern/Search";
 import { Logo } from "@/assets/Logo";
 import { StackNavigationProp } from "@react-navigation/stack";
-import SuggestionParamList from "@/app/(suggestion)/paramList";
+import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { useNavigation } from "@react-navigation/native";
 
 interface SuggestionHeaderProps{

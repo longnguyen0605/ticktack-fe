@@ -1,8 +1,7 @@
-import ProfileHome from "@/components/profile/ProfileHome"
-
-export default function ProfileHomeScreen() {
+import ProfileNoLogin from "@/components/profile/ProfileNoLogin"
+export default function ProfileNoLoginScreen() {
 
     return(
-        <ProfileHome />
+        <ProfileNoLogin />
     )
 }
