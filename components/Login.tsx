@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { useState } from 'react';
+import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { color } from '@/theme/color';
 import PrimaryButton from '@/components/ui/PrimaryButton';
@@ -8,6 +8,7 @@ import KeyIcon from '@/assets/images/Pass.svg';
 import GoogleIcon from '@/assets/images/Google.svg'; 
 import FacebookIcon from '@/assets/images/Facebook.svg'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -41,7 +42,7 @@ const Login = () => {
       if (response.ok) {
         // Parse the response
         const data = await response.json();
-        const jwtToken =data.data.access_token;
+        const jwtToken = data.data.access_token;
         
         if (jwtToken) {
           // Store JWT token in AsyncStorage
@@ -68,7 +69,7 @@ const Login = () => {
   
 
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps={Platform.OS =='android' ? "handled": "always"} style={styles.container}>
       {/* Header Image */}
       <View style={styles.imageContainer}>
         <Image
@@ -142,7 +143,7 @@ const Login = () => {
           Create now
         </Text>
       </View>
-    </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 

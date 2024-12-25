@@ -13,7 +13,7 @@ interface SettingPopupMenuProps{
 const SettingPopupMenu = (props: SettingPopupMenuProps) =>{
 
     const onLogoutBtn = () =>{
-
+        props.handleLogout();
     }
 
     const onContactBtn = () =>{

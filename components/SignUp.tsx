@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 import PrimaryButton from '@/components/ui/PrimaryButton';
@@ -16,6 +17,7 @@ import ConfirmIcon from '@/assets/images/ConfirmPass.svg';
 import GoogleIcon from '@/assets/images/Google.svg'; 
 import FacebookIcon from '@/assets/images/Facebook.svg'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -59,7 +61,7 @@ const SignUp = () => {
       avatarURL: "https://172.0.0.1",
       medal: 100, 
     };
-    var message="Not matching";
+    var message = "Not matching";
     try{
       const response = await fetch('https://ticktak-backend.onrender.com/auth/sign-up', {
         method: 'POST',
@@ -76,9 +78,9 @@ const SignUp = () => {
       }
   
       // Retrieve JWT token from response headers
-      const data =response.json();
+      const data = response.json();
 
-      message=data.message;
+      message = data.message;
       const jwtToken = data.data.access_token;
   
       if (jwtToken) {
@@ -93,8 +95,8 @@ const SignUp = () => {
       router.navigate('/home');
     }
     catch{
-      setConfirmPasswordError(message);
-      hasError = true;
+      // setConfirmPasswordError(message);
+      // hasError = true;
     }
     if (!hasError) {
       console.log('Sign Up Successful:', username);
@@ -103,7 +105,7 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps={Platform.OS =='android' ? "handled": "always"} style={styles.container}>
       {/* Header Image */}
       <View style={styles.imageContainer}>
         <Image
@@ -204,7 +206,7 @@ const SignUp = () => {
           Login
         </Text>
       </View>
-    </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 

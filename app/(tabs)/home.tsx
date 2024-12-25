@@ -1,4 +1,4 @@
-  import React, { useState, useEffect } from 'react';
+  import { useState, useEffect } from 'react';
   import {
     SafeAreaView,
     View,
@@ -60,7 +60,6 @@
         setIsRunning(false);
         setShowRewardScreen(true);
         setMedalCount(focusedTime+medalCount);
-        updateMedalCount();
       }
     }, [timeLeft, isRunning]);
 
@@ -185,17 +184,24 @@
               source={require('@/assets/images/Finish.png')}
               style={styles.finishImage}
             />
-            <Text style={styles.rewardSubHeader}>Your Reward</Text>
-            <TouchableOpacity
-              style={styles.receiveButton}
-              onPress={() => {
-                setShowRewardScreen(false);
-                setTimeLeft(focusedTime * 60);
-                setShowQuote(false);
-              }}
-            >
-              <Text style={styles.receiveButtonText}>Receive</Text>
-            </TouchableOpacity>
+            <View style={styles.timeCard}>
+              <Text style={styles.rewardSubHeader}>Your Reward</Text>
+              <View style={{...styles.medalContainer, backgroundColor: '#fff'}}>
+                    <MedalIcon width={20} height={20} style={styles.icon} />
+                    <Text style={{...styles.medalText, fontSize: 20}}>10</Text>
+                  </View>
+              <TouchableOpacity
+                style={styles.receiveButton}
+                onPress={() => {
+                  setShowRewardScreen(false);
+                  setTimeLeft(focusedTime * 60);
+                  setShowQuote(false);
+                  updateMedalCount();
+                }}
+              >
+                <Text style={styles.receiveButtonText}>Receive</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           </>
         ) : (
@@ -228,12 +234,12 @@
             <View style={styles.timeCard}>
               <View style={styles.timeCardHeader}>
                 <Text style={styles.timeCardTitle}>Your time</Text>
-                <TouchableOpacity
+                {!isRunning && <TouchableOpacity
                   style={styles.pencilButton}
                   onPress={handleEditPlanPress}
                 >
                   <Ionicons name="pencil" size={16} color="#FFF" />
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
 
               <View style={styles.activityTag}>
@@ -518,7 +524,8 @@
     medalContainer: {
       backgroundColor: '#EEEEEE',
       borderRadius:20,
-      padding: 3,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
       flexDirection: 'row',
       alignItems: 'center',
     },
@@ -739,7 +746,14 @@
       marginVertical: 10,
     },
 
-
+    receiveContainer: {
+      borderWidth: 1,
+      borderRadius: 8,
+      padding: 30,
+      borderColor: 'lightgray',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
 
     pickerContainer: {
       margin: 10,
@@ -909,7 +923,7 @@
       alignItems: 'center',
       justifyContent: 'center',
       paddingHorizontal: 20,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: '#FFFFFF'
     },
     rewardCongratsText: {
       fontSize: 20,

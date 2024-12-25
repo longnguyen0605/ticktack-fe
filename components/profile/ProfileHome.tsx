@@ -15,6 +15,7 @@ import { useNavigation, useRouter } from "expo-router";
 import AchievementItem from "./AchievementItem";
 import SettingPopupMenu from "./SettingPopupMenu";
 import { MenuProvider } from "react-native-popup-menu";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -66,8 +67,9 @@ const ProfileHome = () =>{
         }
       };
 
-    const  handleLogout = () => {
-
+    const handleLogout = async () => {
+        await AsyncStorage.clear();
+        router.navigate('/(auth)/login');
     }
       
     const handleContact = () =>{
@@ -239,14 +241,12 @@ const styles = StyleSheet.create({
 
     },
     infoContainer:{
-        width: "100%",
         height: 100,
         flexDirection:"row",
     },
 
     info:{
         marginLeft: 30,
-        height:"100%",
         flex: 1,
         justifyContent:"space-between"
     },
@@ -255,11 +255,10 @@ const styles = StyleSheet.create({
         marginTop: 5,
         flexDirection:"column",
         width:"100%",
-        
-        
     },
     tabContainer:{
         marginTop: 16,
+        padding: 5
     }
 
 
