@@ -24,7 +24,7 @@ const ProfileLayout = () => {
 
   useEffect(() => {
     if (userLogedIn()){
-      setInitScreen("profileHome")
+       setInitScreen("profileHome")
     }
     else{
       setInitScreen("profileNoLogin")

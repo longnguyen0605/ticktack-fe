@@ -16,7 +16,8 @@ export default function Onboarding() {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <PrimaryButton title="Go to Onboarding" onPress={() => {router.navigate('/(onboarding)/onboarding1')}}/>
+        {/* <PrimaryButton title="Go to Onboarding" onPress={() => {router.navigate('/(onboarding)/onboarding1')}}/> */}
+        <PrimaryButton title="Go to Onboarding" onPress={() => {router.navigate('/(tabs)/home')}}/>
       </View>
   </SafeAreaView>)
 }
