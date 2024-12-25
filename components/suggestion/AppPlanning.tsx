@@ -38,7 +38,7 @@ interface ITimePickData{
 type AcitityType = "Relax" | "Study" | "Other"
 
 const AppPlanning = (props: AppPlanningProps) =>{
-    const [usingTime, setUsingTime] = useState<number>();
+    const [usingTime, setUsingTime] = useState<number>(0);
     const [currActivity, setCurrActivity] = useState<AcitityType>("Relax");
     const [timeList, setTimeList] = useState<Item[]>();
 
@@ -71,10 +71,10 @@ const AppPlanning = (props: AppPlanningProps) =>{
     const getTimeList: () => Item[] = () =>{
         if (appData.maxUsingTime) {
             const temp: Item[] = [];
-            for (let i = 5; i <= appData.maxUsingTime; i+=5) {
-                temp.push({ label: `${i}`, value: i });
+            for (let i = 10; i <= appData.maxUsingTime; i+=5) {
+                temp.push({ label: `${i} MIN`, value: i });
             }
-            if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime}`, value: appData.maxUsingTime });
+            if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime} MIN`, value: appData.maxUsingTime });
             return temp
         }
         return [];
@@ -82,7 +82,14 @@ const AppPlanning = (props: AppPlanningProps) =>{
     
         
     const handleStart = () =>{
-
+        navigator.navigate("appTimer", 
+            {
+                appId: appData.id, 
+                appLogoURL:appData.logoURL,
+                usingTime:usingTime,
+                activity: currActivity,
+            }
+        )
     }  
 
     return(
@@ -136,7 +143,7 @@ const AppPlanning = (props: AppPlanningProps) =>{
                 <RNPickerSelect 
                     onValueChange={(value) =>setUsingTime(value)}
                     items={getTimeList()}
-                    placeholder={{ label: '0', value: '0' }}
+                    placeholder={{ label: '5 MIN', value: '0' }}
                 />
 
             </View>

@@ -4,7 +4,7 @@ type SuggestionParamList = {
     appSelect: {categoryId: number};
     appPlanning: {appId: number};
     appEdit: {categoryId: number};
-    appTimer: undefined;
+    appTimer: {appId: number, appLogoURL: string, activity:string, usingTime: number};
     appTimeout: undefined;
 
   };
