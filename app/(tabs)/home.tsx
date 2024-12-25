@@ -1,4 +1,4 @@
-  import React, { useState, useEffect } from 'react';
+  import { useState, useEffect } from 'react';
   import {
     SafeAreaView,
     View,
@@ -228,12 +228,12 @@
             <View style={styles.timeCard}>
               <View style={styles.timeCardHeader}>
                 <Text style={styles.timeCardTitle}>Your time</Text>
-                <TouchableOpacity
+                {!isRunning && <TouchableOpacity
                   style={styles.pencilButton}
                   onPress={handleEditPlanPress}
                 >
                   <Ionicons name="pencil" size={16} color="#FFF" />
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
 
               <View style={styles.activityTag}>
@@ -518,7 +518,8 @@
     medalContainer: {
       backgroundColor: '#EEEEEE',
       borderRadius:20,
-      padding: 3,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
       flexDirection: 'row',
       alignItems: 'center',
     },

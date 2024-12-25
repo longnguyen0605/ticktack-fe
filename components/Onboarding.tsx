@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { textStyle } from '@/theme/textStyle';
@@ -24,7 +23,7 @@ const Onboarding = (props: OnboardingProps) => {
   const handleNavigation = (order: number) => {
     if (order === 1) router.navigate('/(onboarding)/onboarding2')
     else if (order === 2) router.navigate('/(onboarding)/onboarding3')
-    else console.log('Done')
+    else router.navigate('/(auth)/login')
   }
 
   return (
