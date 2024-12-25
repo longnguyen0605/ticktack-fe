@@ -10,7 +10,7 @@ interface AddAppModelProps{
     onRequestClose: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const AddAppModel =  (props: AddAppModelProps) =>{
+const   AddAppModel =  (props: AddAppModelProps) =>{
 
     const fakeData = [
         {label: "App 1", value: "1"},
@@ -39,7 +39,7 @@ const AddAppModel =  (props: AddAppModelProps) =>{
     const onAdd = () =>{
 
     }
-
+    
 
     return(
         <Modal

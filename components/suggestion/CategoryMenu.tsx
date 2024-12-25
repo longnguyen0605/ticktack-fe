@@ -25,6 +25,7 @@ const CategoryMenu = () =>{
 
     ];
 
+    
     const categoryData :{id: number, categoryName:string, categoryInfo:string, icon: JSX.Element}[]= [
         {
             id: 0, categoryName: "Study", categoryInfo:"Document, Testing App", icon: iconList[0]
