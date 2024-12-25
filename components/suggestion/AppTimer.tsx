@@ -21,12 +21,12 @@ interface AppTimerProps{
 const AppTimer = (props: AppTimerProps) =>{
     const [currMin, setCurrMin] = useState(props.usingTime);
     const [currSec, setCurrSec] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
+    const [isRunning, setIsRunning] = useState(true);
 
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
 
     const handleTimeOut = () =>{
-        navigator.replace('appTimeout');      
+        navigator.replace('appTimeout', {appId: props.appId});      
     }
 
     useEffect(() => {

@@ -143,7 +143,7 @@ const AppPlanning = (props: AppPlanningProps) =>{
                 <RNPickerSelect 
                     onValueChange={(value) =>setUsingTime(value)}
                     items={getTimeList()}
-                    placeholder={{ label: '5 MIN', value: '0' }}
+                    placeholder={{ label: '5 MIN', value: '5' }}
                 />
 
             </View>
