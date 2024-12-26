@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 type NavigationProp = StackNavigationProp<RootParamList, '(auth)'>;
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

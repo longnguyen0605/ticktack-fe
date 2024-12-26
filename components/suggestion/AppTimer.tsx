@@ -12,7 +12,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
 
 interface AppTimerProps{
-    appId:number, 
+    appId:string, 
     appLogoURL:string,
     usingTime: number,
     activity: string,

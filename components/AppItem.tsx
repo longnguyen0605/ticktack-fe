@@ -9,14 +9,14 @@ import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 
 interface AppItemProps{
-    id: number,
+    id: string,
     appName?: string,
     description?: string,
     logoURL?: string,
     height?: number,
     bgColor?: string,
     mode?: "none" | "select" | "delete",
-    onDelete?: (id:number) => void 
+    onDelete?: (id:string) => void 
     
 }
 

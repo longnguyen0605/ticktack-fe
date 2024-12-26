@@ -25,27 +25,28 @@ const CategoryMenu = () =>{
 
     ];
 
-    
     const categoryData :{id: number, categoryName:string, categoryInfo:string, icon: JSX.Element}[]= [
         {
-            id: 0, categoryName: "Study", categoryInfo:"Document, Testing App", icon: iconList[0]
+            id: 1, categoryName: "Study", categoryInfo:"Document, Testing App", icon: iconList[0]
         },
         {
-            id: 1, categoryName: "Work", categoryInfo:"Communication, Time Management App", icon: iconList[1]
+            id: 2, categoryName: "Work", categoryInfo:"Communication, Time Management App", icon: iconList[1]
         },
         {
-            id: 2, categoryName: "Relax", categoryInfo:"Gaming, Social and Entertainment App", icon: iconList[2]
+            id: 3, categoryName: "Relax", categoryInfo:"Gaming, Social and Entertainment App", icon: iconList[2]
         },
         {
-            id: 3, categoryName: "Sport", categoryInfo:"Running, Yoga and other Sport App", icon: iconList[3]
+            id: 4, categoryName: "Sport", categoryInfo:"Running, Yoga and other Sport App", icon: iconList[3]
         },
         {
-            id: 4, categoryName: "Other", categoryInfo:"Other useful App", icon: iconList[4]
+            id: 5, categoryName: "Other", categoryInfo:"Other useful App", icon: iconList[4]
         },
 
     ];
 
     const navigation = useNavigation<NavigationProp<SuggestionParamList>>();
+
+
     return(
         <SafeAreaView style={styles.container}>
             <Text style={{...textStyle.normalTitle, ...styles.title}}>Suggestion</Text>

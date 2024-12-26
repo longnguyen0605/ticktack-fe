@@ -17,14 +17,15 @@ import { Timer } from "@/assets/icon/DesignPattern/Timer";
 import { YellowDot } from "@/assets/icon/DesignPattern/YellowDot";
 import { SmartphoneDevice } from "@/assets/icon/DesignPattern/SmartphoneDevice";
 import { Medal } from "@/assets/icon/DesignPattern/Medal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AppPlanningProps{
-    id: number
+    id: string
 }
 
 
 interface IAppData{
-    id: number,
+    id: string,
     appName: string,
     logoURL: string,
     maxUsingTime?:number,
@@ -42,27 +43,64 @@ const AppPlanning = (props: AppPlanningProps) =>{
     const [currActivity, setCurrActivity] = useState<AcitityType>("Relax");
     const [timeList, setTimeList] = useState<Item[]>();
 
-    const [appData , setAppData] = useState<IAppData>({id: -1, appName: "", maxUsingTime: 0, logoURL: ""} );
+    const [appData , setAppData] = useState<IAppData>({id: "-1", appName: "", maxUsingTime: 0, logoURL: ""} );
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const handleSelectAct = (act:AcitityType) => {
         setCurrActivity(act)
     }
     
-    const getAppData = () =>{
+    const getAppData = (data: any) =>{
 
-        // Fetch from API
-        
+    
+        const updatedData =({
+            id: props.id,
+            appName: data.name,
+            logoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrAMz342ZIAScN8qmLsOXuv4nuYbh3pMK2jA&s"
+          
+          });
+        setAppData(updatedData);
 
         //
-        setAppData(
-            {id: 0, appName: "Youtube", maxUsingTime: 60, logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},    
-        );
+        // setAppData(
+        //     {id: "0", appName: "Youtube", maxUsingTime: 60, logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},    
+        // );
     }
+
+    const fetchAppDatta = async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        
+        try {
+            const response = await fetch(`https://ticktak-backend.onrender.com/my-app/${props.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              getAppData(data.data)
+              
+            } else {
+              
+              throw new Error('Failed to fetch AppDataList');
+              
+            }
+            
+          } catch (error) {
+            
+            console.error('Error fetching AppDataList:', error);
+          }
+    
+    }
+
+
     
     useEffect(()=>{
         
-        getAppData();
+        fetchAppDatta();
         
 
     }, []);

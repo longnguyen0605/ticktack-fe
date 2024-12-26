@@ -14,7 +14,7 @@ import { Medal } from "@/assets/icon/DesignPattern/Medal";
 import { MediaVideoList } from "@/assets/icon/DesignPattern/MediaVideoList";
 
 interface AppTimeOutProps{
-    appId:number, 
+    appId:string, 
     
 }
 

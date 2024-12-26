@@ -14,7 +14,7 @@ interface CategoryItemProps{
     categoryName: string,
     categoryInfo: string,
     icon: JSX.Element,
-
+  
 }
 
 
@@ -27,7 +27,7 @@ const CategoryItem = (props: CategoryItemProps) =>{
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
 
     const handleBtnPress = () =>{
-        navigator.navigate('appSelect', {id: props.id})
+        navigator.push('appSelect', {categoryId: props.id})
     }
 
     return(
