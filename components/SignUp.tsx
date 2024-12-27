@@ -85,12 +85,9 @@ const SignUp = () => {
   
       if (jwtToken) {
         await AsyncStorage.setItem('jwtToken', jwtToken);
-        console.log('JWT Token stored successfully:', jwtToken);
       } else {
         throw new Error('JWT Token not found in response headers.');
       }
-  
-      console.log('Sign Up Successful:', data);
       // Navigate to home page
       router.navigate('/home');
     }
@@ -99,7 +96,6 @@ const SignUp = () => {
       // hasError = true;
     }
     if (!hasError) {
-      console.log('Sign Up Successful:', username);
       router.navigate('/home'); 
     }
   };

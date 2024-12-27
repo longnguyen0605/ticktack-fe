@@ -9,20 +9,12 @@ import GoogleIcon from '@/assets/images/Google.svg';
 import FacebookIcon from '@/assets/images/Facebook.svg'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RootParamList from '@/app/_paramList';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
-
-
-type NavigationProp = StackNavigationProp<RootParamList, '(auth)'>;
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
 
-  
-  const navigation = useNavigation<NavigationProp>();
   const handleLogin = async () => {
     AsyncStorage.removeItem('jwtToken');
     // Replace with your API endpoint
@@ -55,22 +47,15 @@ const Login = () => {
         if (jwtToken) {
           // Store JWT token in AsyncStorage
           await AsyncStorage.setItem('jwtToken', jwtToken);
-          console.log('JWT Token stored successfully:', jwtToken);
   
           // Navigate to the home screen
-          console.log('Login Successful');
-          // router.navigate('/home');
-          navigation.reset({
-            index: 0,
-            routes: [{ name: '(tabs)' }], // Ensure the name matches your RootParamList
-          });
+          router.navigate('/home');
         } else {
           throw new Error('JWT Token not found in response headers.');
         }
       } else {
         // Handle login failure
         setLoginFailed(true);
-        console.log('Login Failed');
       }
     } catch (error) {
       // Handle errors

@@ -27,7 +27,7 @@ const AppTimeOut = ( props: AppTimeOutProps) =>{
     }
 
     const handleDouble = () =>{
-        console.log("Hello youtube")
+        // console.log("Hello youtube")
     }
 
     const handleContinue = () =>{
