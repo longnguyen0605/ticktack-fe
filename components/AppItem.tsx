@@ -8,14 +8,14 @@ import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 
 interface AppItemProps{
-    id: number,
+    id: string,
     appName?: string,
     description?: string,
     logoURL?: string,
     height?: number,
     bgColor?: string,
     mode?: "none" | "select" | "delete",
-    onDelete?: (id:number) => void 
+    onDelete?: (id:string) => void 
     
 }
 
@@ -24,11 +24,11 @@ const AppItem = (props: AppItemProps) =>{
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const selectPlanning =() =>{
-        navigator.navigate('appPlanning', {appId:props.id})
+        if (props.appName) navigator.navigate('appPlanning', {appId:props.appName})
     }
 
     const handleDelete = () => {
-        if (props.mode=="delete" && props.onDelete) props.onDelete(props.id);
+        if (props.appName && props.mode=="delete" && props.onDelete) props.onDelete(props.appName);
     }
 
     const handleBtnPress = ()=>{

@@ -8,7 +8,7 @@ import SuggestionParamList from './_paramList';
 import AppPlanningScreen from './appPlanning';
 import AppEditScreen from './appEdit';
 import AppTimerScreen from './appTimer';
-import AppTimeOutScreen from './appTimeOut';
+import AppTimeOutScreen from './appTimeout';
 
 
 const Stack = createStackNavigator<SuggestionParamList>();
