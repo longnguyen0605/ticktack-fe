@@ -21,14 +21,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 interface IFavAppData{
-    id: number,
+    id: string,
     appName: string,
     logoURI:string,
     usingTime: number,
 }
 
 interface IAchievement{
-    id: number,
+    id: string,
     name: string,
     threshHold: number,
     currProcess: number,
@@ -53,6 +53,17 @@ const ProfileHome = () =>{
     
     const navigator = useNavigation<StackNavigationProp<ProfileParamList>>();
     const router = useRouter()
+
+    const fakeFav =[
+        {id: "0", appName: "Youtube", usingTime: 1, logoURI: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
+        {id: "1", appName: "Facebook",usingTime: 2, logoURI: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
+        {id: "2", appName: "Tiktok", usingTime: 3, logoURI: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
+    ]
+
+    const fakeAchi = [
+        {id: "0",name: "10 hours study", threshHold: 10, currProcess: 10, },
+        {id:"1", name: "20 hours study", threshHold: 20, currProcess: 10, },
+    ]
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -88,27 +99,55 @@ const ProfileHome = () =>{
         pickImage()
     }
 
+
+    const fetchUserData= async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        
+        // try {
+        //     const response = await fetch(`https://ticktak-backend.onrender.com/category/${props.id}`, {
+        //       method: 'GET',
+        //       headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${token}`,
+        //       },
+        //     });
+      
+        //     if (response.ok) {
+        //       const data = await response.json();
+        //       getAppDataList(data.data)
+              
+        //     } else {
+              
+        //       throw new Error('Failed to fetch AppDataList');
+              
+        //     }
+            
+        //   } catch (error) {
+            
+        //     console.error('Error fetching AppDataList:', error);
+        //   }
+    
+
+    }
+    
     //Load data
     useEffect(() => {
         const loadAvatar = async () => {
           
         };
+        
         const loadUserData = async () =>{
             // Fetch user data
+            
 
+
+            //
             const userData : IUserData={
                 userName: "Nguyen Long",
                 joinYear: 2023,
                 achievementNum: 10,
-                favAppList:[
-                    {id: 0, appName: "Youtube", usingTime: 1, logoURI: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
-                    {id: 1, appName: "Facebook",usingTime: 2, logoURI: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
-                    {id: 2, appName: "Tiktok", usingTime: 3, logoURI: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
-                ],
-                achievementList: [
-                    {id: 0,name: "10 hours study", threshHold: 10, currProcess: 10, },
-                    {id:1, name: "20 hours study", threshHold: 20, currProcess: 10, },
-                ]
+                favAppList: fakeFav,
+                achievementList: fakeAchi
             }
             //
             setUSerData(userData)

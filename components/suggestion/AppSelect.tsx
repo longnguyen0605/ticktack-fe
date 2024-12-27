@@ -8,9 +8,10 @@ import { FlatList } from "react-native-gesture-handler";
 import { EditPencil } from "@/assets/icon/DesignPattern/EditPencil";
 import { color } from "@/theme/color";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import SuggestionParamList from "@/app/(suggestion)/_paramList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
 
 
 interface AppSelectProps{
@@ -31,9 +32,6 @@ const AppSelect = (props: AppSelectProps) =>{
     
     
     const getAppDataList = async ( dataList: any[]) =>{
-        // const token = await AsyncStorage.getItem('jwtToken');
-        // // Fetch from API
-        // console.log(token)
 
         const updatedData = dataList.map((item, index) => ({
             id: item.id,
@@ -42,14 +40,7 @@ const AppSelect = (props: AppSelectProps) =>{
           
           }));
         setAppDataList(updatedData);
-        //
-        // setAppDataList([
-        //     {id: "0", appName: "Youtube", logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
-        //     {id: "1", appName: "Facebook", logoURL: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
-        //    {id: "2", appName: "Tiktok", logoURL: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
-           
-           
-        // ]);
+        
     }
 
 
@@ -87,6 +78,18 @@ const AppSelect = (props: AppSelectProps) =>{
     useEffect(()=>{
         fetchAppDataList()
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+      
+            const loadData = async () => {
+                await fetchAppDataList(); 
+            };
+
+            loadData(); 
+
+        }, [])
+    );
    
     const handleEdit = () =>{
         navigator.navigate('appEdit', {categoryId:props.id})

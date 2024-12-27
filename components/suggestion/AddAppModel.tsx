@@ -8,7 +8,8 @@ import { Dropdown } from "react-native-element-dropdown";
 
 interface AddAppModelProps{
     visible: boolean,
-    onRequestClose: React.Dispatch<React.SetStateAction<boolean>>
+    onRequestClose: ()=>void,
+    categoryID: number;
 }
 
 const   AddAppModel =  (props: AddAppModelProps) =>{
@@ -28,31 +29,117 @@ const   AddAppModel =  (props: AddAppModelProps) =>{
 
     const [appName, setAppName] = useState('');
     const [time, setTime] = useState(15);
+    const [myAppList, setMyAppList] = useState<{name:string, image?:string}[]>([]);
 
     const onCancel = () =>{
-        props.onRequestClose(false)
+        props.onRequestClose()
     }
 
+    const putApp = async (token:string|null) =>{
+        const response = await fetch(`https://ticktak-backend.onrender.com/app`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify([
+                {name: appName, image:"hello.com"}
+            ])
+          });
+        if (!response.ok) throw Error("Cannot PUT app ")
+    }
+
+    const putMyApp = async (token: string | null) => {
+        try {
+          // Clear the current list
+          setMyAppList([]);
+      
+          // Fetch existing apps
+          const response = await fetch(`https://ticktak-backend.onrender.com/my-app`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to fetch MyAppList');
+          }
+      
+          const data = await response.json();
+          const fetchedDataList = data.data.map((item: any) => ({
+            name: item.app.name,
+            image: item.app.image,
+          }));
+      
+          // Add to the state
+          let updatedList = [...fetchedDataList];
+      
+          // Check if the app already exists, and add it if not
+          if (!updatedList.some(obj => obj.name === appName)) {
+            updatedList = [...updatedList, { name: appName, image: 'hello.com' }];
+          }
+      
+          // Update the state
+          setMyAppList(updatedList);
+      
+          // Send updated list back to the server
+          const response1 = await fetch(`https://ticktak-backend.onrender.com/my-app`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(updatedList),
+          });
+      
+          if (!response1.ok) {
+            throw new Error('Failed to update MyAppList on the server');
+          }
+      
+          console.log('MyAppList updated successfully');
+        } catch (error:any) {
+          console.error(error.message);
+        }
+      };
+
     const onAdd = async () =>{
+ 
         const token = await AsyncStorage.getItem('jwtToken');
-        const response = await fetch(`https://ticktak-backend.onrender.com/my-app/${appName}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            categoryId: '1', // truyền categoryId
-            recommendedUsage: time
-          })
-        });
+        try{
+            
+            await putApp(token)
+            await putMyApp(token);
+
+            const response2 = await fetch(`https://ticktak-backend.onrender.com/my-app/${appName}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    categoryId: props.categoryID.toString(), 
+                    recomendUsage : time.toString()
+                  })
+              });
+             
+              if (!response2.ok) throw Error("Cannot post my-app");
+        }
+        catch(error){
+                console.log(error)
+        }
+
+        // 
+        onCancel();
+        
     }
     
 
     return(
         <Modal
             visible={props.visible}    
-            onRequestClose={()=>props.onRequestClose(false)}
+            onRequestClose={()=>props.onRequestClose()}
             animationType="fade"
             transparent
             

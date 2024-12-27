@@ -28,7 +28,7 @@ const AppItem = (props: AppItemProps) =>{
     }
 
     const handleDelete = () => {
-        if (props.mode=="delete" && props.onDelete) props.onDelete(props.id);
+        if (props.appName && props.mode=="delete" && props.onDelete) props.onDelete(props.appName);
     }
 
     const handleBtnPress = ()=>{
