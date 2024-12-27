@@ -100,60 +100,45 @@ const ProfileHome = () =>{
     }
 
 
-    const fetchUserData= async () =>{
+    const fetchUser =  async () =>{
         const token = await AsyncStorage.getItem('jwtToken');
-        
-        // try {
-        //     const response = await fetch(`https://ticktak-backend.onrender.com/category/${props.id}`, {
-        //       method: 'GET',
-        //       headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${token}`,
-        //       },
-        //     });
-      
-        //     if (response.ok) {
-        //       const data = await response.json();
-        //       getAppDataList(data.data)
-              
-        //     } else {
-              
-        //       throw new Error('Failed to fetch AppDataList');
-              
-        //     }
-            
-        //   } catch (error) {
-            
-        //     console.error('Error fetching AppDataList:', error);
-        //   }
+        const response = await fetch(`https://ticktak-backend.onrender.com/user`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
     
-
+          if (response.ok) {
+            const data = await response.json();
+            // interface IUserData{
+            //     userName: string,
+            //     joinYear: number,
+            //     achievementNum: number,
+            //     achievementList: IAchievement[],
+            //     avatarURI?:string,
+            //     favAppList: IFavAppData[],  
+            // }
+            setUSerData({
+                userName: data.data.name,
+                joinYear: new Date(data.data.createdAt).getFullYear(),
+                achievementNum: data.data.medal,
+                favAppList: fakeFav,
+                achievementList: fakeAchi
+            });
+            console.log(data.data)
+            
+          } else {
+            
+            throw new Error('Failed to fetch AppDataList');
+            
+          }
     }
     
     //Load data
     useEffect(() => {
-        const loadAvatar = async () => {
-          
-        };
-        
-        const loadUserData = async () =>{
-            // Fetch user data
-            
-
-
-            //
-            const userData : IUserData={
-                userName: "Nguyen Long",
-                joinYear: 2023,
-                achievementNum: 10,
-                favAppList: fakeFav,
-                achievementList: fakeAchi
-            }
-            //
-            setUSerData(userData)
-        }
-
-        loadUserData();
+        fetchUser();
       }, []);
 
     return (

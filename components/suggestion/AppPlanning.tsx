@@ -20,7 +20,8 @@ import { Medal } from "@/assets/icon/DesignPattern/Medal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AppPlanningProps{
-    id: string
+    id: string,
+    
 }
 
 
@@ -107,14 +108,14 @@ const AppPlanning = (props: AppPlanningProps) =>{
 
     
     const getTimeList: () => Item[] = () =>{
-        if (appData.maxUsingTime) {
+       // if (appData.maxUsingTime) {
             const temp: Item[] = [];
-            for (let i = 10; i <= appData.maxUsingTime; i+=5) {
+            for (let i = 10; i <= 60; i+=5) {
                 temp.push({ label: `${i} MIN`, value: i });
             }
-            if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime} MIN`, value: appData.maxUsingTime });
+            //if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime} MIN`, value: appData.maxUsingTime });
             return temp
-        }
+        //}
         return [];
     }
     
@@ -136,7 +137,7 @@ const AppPlanning = (props: AppPlanningProps) =>{
             <ScrollView showsVerticalScrollIndicator={false}>
             <AppItem 
                 id={props.id}
-                appName={appData?.appName}
+                appName={props.id}
                 logoURL={appData?.logoURL}
                 description="Recommendation: 1 hour per day"
                 bgColor="white"

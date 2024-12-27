@@ -12,6 +12,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
 import { Medal } from "@/assets/icon/DesignPattern/Medal";
 import { MediaVideoList } from "@/assets/icon/DesignPattern/MediaVideoList";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AppTimeOutProps{
     appId:string, 
@@ -20,6 +21,8 @@ interface AppTimeOutProps{
 
 const AppTimeOut = ( props: AppTimeOutProps) =>{
     
+    const [userData, setUserData] = useState<any>(null);
+
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
 
     const handleRecieve = () =>{
@@ -33,6 +36,66 @@ const AppTimeOut = ( props: AppTimeOutProps) =>{
     const handleContinue = () =>{
         navigator.navigate("appPlanning", {appId:props.appId})
     }
+
+
+    const fetchMedal =  async (token: string|null) =>{
+        const response = await fetch(`https://ticktak-backend.onrender.com/user`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setUserData(data.data);
+            console.log(data.data)
+            
+          } else {
+            
+            throw new Error('Failed to fetch AppDataList');
+            
+          }
+    }
+
+    const updateUserMedal = async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        
+        try {
+
+            await fetchMedal(token);
+            if (!userData) throw Error("Fetch error")
+            const response1 = await fetch(`https://ticktak-backend.onrender.com/user`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    name: userData.name,
+                    avatarURL: userData.avatarURL,
+                    medal: userData.medal + 10,    
+                }),
+              });
+          
+              if (!response1.ok) {
+                throw new Error('Failed to update user medal on the server');
+              }
+            
+          } catch (error) {
+            
+            console.log(error);
+          }
+    
+
+    }
+
+
+    useEffect(()=>{
+        updateUserMedal()
+    }, []);
+
 
     return (
         <SafeAreaView style={styles.container}>

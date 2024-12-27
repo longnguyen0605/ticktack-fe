@@ -24,7 +24,7 @@ const AppItem = (props: AppItemProps) =>{
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const selectPlanning =() =>{
-        navigator.navigate('appPlanning', {appId:props.id})
+        if (props.appName) navigator.navigate('appPlanning', {appId:props.appName})
     }
 
     const handleDelete = () => {

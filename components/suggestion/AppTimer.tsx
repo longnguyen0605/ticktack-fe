@@ -75,7 +75,9 @@ const AppTimer = (props: AppTimerProps) =>{
     return (
         <SafeAreaView style={styles.container}>
             <SuggestionHeader />
-            <ScrollView>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
             <View style={styles.quoteContainer}>
                 <Text style={{...textStyle.title,fontSize: 14}}>One day, all your hard work will pay off</Text>
             </View>
