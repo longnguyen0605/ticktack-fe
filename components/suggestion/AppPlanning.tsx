@@ -40,7 +40,7 @@ interface ITimePickData{
 type AcitityType = "Relax" | "Study" | "Other"
 
 const AppPlanning = (props: AppPlanningProps) =>{
-    const [usingTime, setUsingTime] = useState<number>(0);
+    const [usingTime, setUsingTime] = useState<number>(5);
     const [currActivity, setCurrActivity] = useState<AcitityType>("Relax");
     const [timeList, setTimeList] = useState<Item[]>();
 

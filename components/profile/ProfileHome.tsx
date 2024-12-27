@@ -16,6 +16,8 @@ import AchievementItem from "./AchievementItem";
 import SettingPopupMenu from "./SettingPopupMenu";
 import { MenuProvider } from "react-native-popup-menu";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import React from "react";
 
 
 
@@ -127,7 +129,7 @@ const ProfileHome = () =>{
                 favAppList: fakeFav,
                 achievementList: fakeAchi
             });
-            console.log(data.data)
+      
             
           } else {
             
@@ -141,6 +143,12 @@ const ProfileHome = () =>{
         fetchUser();
       }, []);
 
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchUser(); 
+        }, [])
+        );
     return (
         <MenuProvider>
         <SafeAreaView style={styles.container}>
