@@ -4,10 +4,11 @@
     "slug": "ticktack-fe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": ".assets/appIcon.png",
+    "icon": ".assets/ appIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "entryPoint": "./src/app/index.js",
     "ios": {
       "supportsTablet": true
     },
