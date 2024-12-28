@@ -2,10 +2,10 @@ type SuggestionParamList = {
     categoryMenu: undefined;
     categoryEdit: undefined;
     appSelect: {categoryId: number};
-    appPlanning: {appId: number};
+    appPlanning: {appId: string};
     appEdit: {categoryId: number};
-    appTimer: undefined;
-    appTimeout: undefined;
+    appTimer: {appId: string, appLogoURL: string, activity:string, usingTime: number};
+    appTimeout: {appId: string};
 
   };
 

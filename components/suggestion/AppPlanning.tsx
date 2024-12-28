@@ -17,14 +17,16 @@ import { Timer } from "@/assets/icon/DesignPattern/Timer";
 import { YellowDot } from "@/assets/icon/DesignPattern/YellowDot";
 import { SmartphoneDevice } from "@/assets/icon/DesignPattern/SmartphoneDevice";
 import { Medal } from "@/assets/icon/DesignPattern/Medal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AppPlanningProps{
-    id: number
+    id: string,
+    
 }
 
 
 interface IAppData{
-    id: number,
+    id: string,
     appName: string,
     logoURL: string,
     maxUsingTime?:number,
@@ -38,51 +40,95 @@ interface ITimePickData{
 type AcitityType = "Relax" | "Study" | "Other"
 
 const AppPlanning = (props: AppPlanningProps) =>{
-    const [usingTime, setUsingTime] = useState<number>();
+    const [usingTime, setUsingTime] = useState<number>(5);
     const [currActivity, setCurrActivity] = useState<AcitityType>("Relax");
     const [timeList, setTimeList] = useState<Item[]>();
 
-    const [appData , setAppData] = useState<IAppData>({id: -1, appName: "", maxUsingTime: 0, logoURL: ""} );
+    const [appData , setAppData] = useState<IAppData>({id: "-1", appName: "", maxUsingTime: 0, logoURL: ""} );
     const navigator = useNavigation<StackNavigationProp<SuggestionParamList>>();
     
     const handleSelectAct = (act:AcitityType) => {
         setCurrActivity(act)
     }
     
-    const getAppData = () =>{
+    const getAppData = (data: any) =>{
 
-        // Fetch from API
-        
+    
+        const updatedData =({
+            id: props.id,
+            appName: data.name,
+            logoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrAMz342ZIAScN8qmLsOXuv4nuYbh3pMK2jA&s"
+          
+          });
+        setAppData(updatedData);
 
         //
-        setAppData(
-            {id: 0, appName: "Youtube", maxUsingTime: 60, logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},    
-        );
+        // setAppData(
+        //     {id: "0", appName: "Youtube", maxUsingTime: 60, logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},    
+        // );
     }
+
+    const fetchAppDatta = async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        
+        try {
+            const response = await fetch(`https://ticktak-backend.onrender.com/my-app/${props.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              getAppData(data.data)
+              
+            } else {
+              
+              throw new Error('Failed to fetch AppDataList');
+              
+            }
+            
+          } catch (error) {
+            
+            console.error('Error fetching AppDataList:', error);
+          }
+    
+    }
+
+
     
     useEffect(()=>{
         
-        getAppData();
+        fetchAppDatta();
         
 
     }, []);
 
     
     const getTimeList: () => Item[] = () =>{
-        if (appData.maxUsingTime) {
+       // if (appData.maxUsingTime) {
             const temp: Item[] = [];
-            for (let i = 5; i <= appData.maxUsingTime; i+=5) {
-                temp.push({ label: `${i}`, value: i });
+            for (let i = 10; i <= 60; i+=5) {
+                temp.push({ label: `${i} MIN`, value: i });
             }
-            if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime}`, value: appData.maxUsingTime });
+            //if (appData.maxUsingTime % 5 !=0) temp.push({ label: `${appData.maxUsingTime} MIN`, value: appData.maxUsingTime });
             return temp
-        }
+        //}
         return [];
     }
     
         
     const handleStart = () =>{
-
+        navigator.navigate("appTimer", 
+            {
+                appId: appData.id, 
+                appLogoURL:appData.logoURL,
+                usingTime:usingTime,
+                activity: currActivity,
+            }
+        )
     }  
 
     return(
@@ -91,7 +137,7 @@ const AppPlanning = (props: AppPlanningProps) =>{
             <ScrollView showsVerticalScrollIndicator={false}>
             <AppItem 
                 id={props.id}
-                appName={appData?.appName}
+                appName={props.id}
                 logoURL={appData?.logoURL}
                 description="Recommendation: 1 hour per day"
                 bgColor="white"
@@ -136,7 +182,7 @@ const AppPlanning = (props: AppPlanningProps) =>{
                 <RNPickerSelect 
                     onValueChange={(value) =>setUsingTime(value)}
                     items={getTimeList()}
-                    placeholder={{ label: '0', value: '0' }}
+                    placeholder={{ label: '5 MIN', value: '5' }}
                 />
 
             </View>

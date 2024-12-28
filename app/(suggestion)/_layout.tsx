@@ -7,6 +7,8 @@ import CategoryMenuScreen from './categoryMenu';
 import SuggestionParamList from './_paramList';
 import AppPlanningScreen from './appPlanning';
 import AppEditScreen from './appEdit';
+import AppTimerScreen from './appTimer';
+import AppTimeOutScreen from './appTimeout';
 
 
 const Stack = createStackNavigator<SuggestionParamList>();
@@ -24,6 +26,8 @@ const SuggestionLayout = () => {
         <Stack.Screen name='appSelect' component={AppSelectScreen}/>
         <Stack.Screen name='appPlanning' component={AppPlanningScreen}/>
         <Stack.Screen name='appEdit' component={AppEditScreen}/>
+        <Stack.Screen name='appTimer' component={AppTimerScreen}/>
+        <Stack.Screen name='appTimeout' component={AppTimeOutScreen}/>
     </Stack.Navigator>  
   );
 }

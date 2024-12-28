@@ -8,7 +8,7 @@ import { DeleteCircle } from "@/assets/icon/DesignPattern/DeleteCircle";
 import ProfileParamList from "@/app/(profile)/_paramList";
 
 interface AchievementItemProps{
-    id: number,
+    id: string,
     achievementName : string,
     threshHold: number, 
     currProcess: number,

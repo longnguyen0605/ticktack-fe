@@ -1,14 +1,16 @@
-import { Button, Modal, StyleSheet, Text,TouchableOpacity,View } from "react-native";
+import { Modal, StyleSheet, Text,TouchableOpacity,View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SuggestionHeader from "./SuggestionHeader";
 import AppItem from "../AppItem";
 import { textStyle } from "@/theme/textStyle";
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { EditPencil } from "@/assets/icon/DesignPattern/EditPencil";
 import { color } from "@/theme/color";
 import { AddCircle } from "@/assets/icon/DesignPattern/AddCircle";
 import AddAppModel from "./AddAppModel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import React from "react";
 
 
 interface AppEditProps{
@@ -16,7 +18,7 @@ interface AppEditProps{
 }
 
 interface IAppData{
-    id: number,
+    id: string,
     appName: string,
     logoURL: string
 }
@@ -26,45 +28,98 @@ const AppEdit = (props: AppEditProps) =>{
     const [appDataList , setAppDataList] = useState<IAppData[]>();
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-    const [deleteId, setDeleteId] = useState(-1);
+    const [deleteName, setDeleteName] = useState("-1");
 
-    const getAppDataList = () =>{
+    const getAppDataList = async ( dataList: any[]) =>{
 
-        // Fetch from API
+        const updatedData = dataList.map((item, index) => ({
+            id: item.id,
+            appName: item.name,
+            logoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrAMz342ZIAScN8qmLsOXuv4nuYbh3pMK2jA&s"
+          
+          }));
+        setAppDataList(updatedData);
         
+    }
 
-        //
-        setAppDataList([
-            {id: 0, appName: "Youtube", logoURL: "https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png"},
-            {id: 1, appName: "Facebook", logoURL: "https://png.pngtree.com/png-clipart/20181003/ourmid/pngtree-facebook-social-media-icon-facebook-logo-png-image_3654772.png"},
-           {id: 2, appName: "Tiktok", logoURL: "https://banner2.cleanpng.com/20240214/lgr/transparent-tiktok-logo-tiktok-logo-music-streaming-app-entert-tiktok-logo-bright-t-with-sleek-1710878326897.webp"},
-           
-           
-        ]);
+
+    const onAddModalClose = () =>{
+        setIsAddModalVisible(false);
+        fetchAppDataList();
+    }
+    const fetchAppDataList = async () =>{
+        const token = await AsyncStorage.getItem('jwtToken');
+        
+        try {
+            const response = await fetch(`https://ticktak-backend.onrender.com/category/${props.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              getAppDataList(data.data)
+              
+            } else {
+              
+              throw new Error('Failed to fetch AppDataList');
+              
+            }
+            
+          } catch (error) {
+            
+            console.error('Error fetching AppDataList:', error);
+          }
+    
+
     }
     useEffect(()=>{
-        getAppDataList();
+        fetchAppDataList();
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchAppDataList(); 
+        }, [])
+      );
    
-    const onDeleteBtn = (id: number) => {
+    const onDeleteBtn = (name: string) => {
         setIsDeleteModalVisible(true);
-        setDeleteId(id)
+        setDeleteName(name)
     }
 
     const onAddBtn = () =>{
         setIsAddModalVisible(true);
     }
-    const handleDelete = (id: number) =>{
-        
+    const handleDelete =  async () =>{
+        if (deleteName==="-1") return;
+        const token = await AsyncStorage.getItem('jwtToken');
+        const response = await fetch(`https://ticktak-backend.onrender.com/my-app/${deleteName}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+      
+        if (!response.ok) {
+        throw new Error('Failed to fetch MyAppList');
+        }
+        await fetchAppDataList();
     }
 
 
     const onNo = () =>{
         setIsDeleteModalVisible(false);
+        setDeleteName("-1");
     }
 
-    const onYes = () =>{
-        handleDelete(deleteId);
+    const onYes =  async() =>{
+        await handleDelete();
+        setIsDeleteModalVisible(false);
     }
 
 
@@ -78,6 +133,7 @@ const AppEdit = (props: AppEditProps) =>{
                 </TouchableOpacity>
             </View>
             <FlatList 
+                showsVerticalScrollIndicator= {false}
                 style={styles.itemContainer}
                 data={appDataList}
                 renderItem={({item}) => 
@@ -118,7 +174,8 @@ const AppEdit = (props: AppEditProps) =>{
             </Modal>
 
             <AddAppModel 
-                onRequestClose={setIsAddModalVisible}
+                categoryID={props.id}
+                onRequestClose={onAddModalClose}
                 visible={isAddModalVisible}
             />
         </SafeAreaView>

@@ -17,14 +17,13 @@ const ProfileLayout = () => {
 
   const userLogedIn = async () =>{
     const token = await AsyncStorage.getItem('jwtToken');
-    console.log(token);
     if (token) return true;
     return false;
   }
 
   useEffect(() => {
     if (userLogedIn()){
-      setInitScreen("profileHome")
+       setInitScreen("profileHome")
     }
     else{
       setInitScreen("profileNoLogin")
