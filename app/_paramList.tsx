@@ -3,7 +3,7 @@ type RootParamList = {
     '(onboarding)': undefined;
     '(auth)': undefined,
     "+not-found": undefined,
-    "contact":undefined,
+    "(contact)":undefined,
   };
 
 

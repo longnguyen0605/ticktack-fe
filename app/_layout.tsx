@@ -31,11 +31,12 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack initialRouteName='(onboarding)' screenOptions={{headerShown: false}}>
-        <Stack.Screen name="(tabs)"/>
         <Stack.Screen name='(onboarding)'/>
-        <Stack.Screen name='(auth)'/>
+        <Stack.Screen name='(auth)/signup'/>
+        <Stack.Screen name='(auth)/login'/>
+        <Stack.Screen name="(tabs)"/>
         <Stack.Screen name="+not-found" />
-        <Stack.Screen name="contact" />
+        <Stack.Screen name="(contact)" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
